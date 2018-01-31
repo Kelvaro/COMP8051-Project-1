@@ -42,9 +42,9 @@ public class Acceleration : MonoBehaviour {
             timeelapsed = Time.fixedDeltaTime * frame;
             frame++;
             velocity = velocityinitial / (1 + drag * velocityinitial * time);
-            transform.position = new Vector3(0, 0, position);
+           
             curPos = (Mathf.Log((1 + drag * velocityinitial * timeelapsed)) / drag);
-
+            transform.position = new Vector3(0, 0, curPos);
 
 
 
@@ -63,7 +63,7 @@ public class Acceleration : MonoBehaviour {
             
             //updates the velocity with vf = vi + at for constant acceleration
             velocity = velocityinitial + acceleration * timeelapsed;
-        transform.position = new Vector3(0, 0, position);
+        transform.position = new Vector3(0, 0, curPos);
 
         if ( curPos >= position) {
             UnityEditor.EditorApplication.isPaused = true;
