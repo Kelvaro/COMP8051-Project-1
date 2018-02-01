@@ -43,7 +43,7 @@ public class Fire : MonoBehaviour {
 
         GameObject.Find("Gunball(Clone)").transform.position = new Vector3(0,positionY,positionX);
      
-        if (positionY <= 0.15 && tick > 0.5) {
+        if (positionY <= 0.05 && tick > 0.5) {
             UnityEditor.EditorApplication.isPaused = true;
         }
 
