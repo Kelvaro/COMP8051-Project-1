@@ -16,6 +16,8 @@ public class Fire : MonoBehaviour {
     public float frame;
     public float cAngle;
     public float sAngle;
+    public float tick;
+    public float range;
    
 	// Use this for initialization
 	void Start () {
@@ -24,7 +26,7 @@ public class Fire : MonoBehaviour {
         cAngle = Mathf.Cos(gunangle * Mathf.PI/ 180);
         sAngle = -Mathf.Sin(gunangle * Mathf.PI / 180);
         GameObject.Find("GunCentre").transform.eulerAngles = new Vector3(gunangle, 0, 0);
-        
+       
         Instantiate(gunball, GameObject.Find("GunCentre").transform.position, Quaternion.identity);
         
 	}
@@ -35,11 +37,15 @@ public class Fire : MonoBehaviour {
         
         timeelapsed = Time.fixedDeltaTime * frame;
         frame++;
+        tick += Time.deltaTime * frame;
         positionX = GameObject.Find("GunCentre").transform.position.z + speed * cAngle * timeelapsed;
         positionY = ((speed * sAngle) * timeelapsed) + ((gravity / 2) * Mathf.Pow(timeelapsed,2));
 
         GameObject.Find("Gunball(Clone)").transform.position = new Vector3(0,positionY,positionX);
+     
+        if (positionY <= 0.15 && tick > 0.5) {
+            UnityEditor.EditorApplication.isPaused = true;
+        }
 
-        
 	}
 }
