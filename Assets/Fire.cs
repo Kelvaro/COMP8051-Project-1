@@ -11,13 +11,15 @@ public class Fire : MonoBehaviour {
     private float gravity = -9.81f;
     public GameObject gunball;
     public float timeelapsed;
-    public float positionX;
+    public float positionZ;
     public float positionY;
     public float frame;
     public float cAngle;
     public float sAngle;
     public float tick;
     public float range;
+
+    public float twoA;
    
 	// Use this for initialization
 	void Start () {
@@ -28,7 +30,9 @@ public class Fire : MonoBehaviour {
         GameObject.Find("GunCentre").transform.eulerAngles = new Vector3(gunangle, 0, 0);
        
         Instantiate(gunball, GameObject.Find("GunCentre").transform.position, Quaternion.identity);
-        
+
+        twoA = Mathf.Asin(-gravity *  ( Mathf.Sqrt(Mathf.Pow(GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z, 2) + Mathf.Pow(GameObject.Find("Target").transform.position.x , 2 ))   / Mathf.Pow(speed, 2)));
+
 	}
 	
 	// Update is called once per frame
@@ -38,10 +42,10 @@ public class Fire : MonoBehaviour {
         timeelapsed = Time.fixedDeltaTime * frame;
         frame++;
         tick += Time.deltaTime * frame;
-        positionX = GameObject.Find("GunCentre").transform.position.z + speed * cAngle * timeelapsed;
+        positionZ = GameObject.Find("GunCentre").transform.position.z + speed * cAngle * timeelapsed;
         positionY = ((speed * sAngle) * timeelapsed) + ((gravity / 2) * Mathf.Pow(timeelapsed,2));
 
-        GameObject.Find("Gunball(Clone)").transform.position = new Vector3(0,positionY,positionX);
+        GameObject.Find("Gunball(Clone)").transform.position = new Vector3(0,positionY,positionZ);
      
         if (positionY <= 0.05 && tick > 0.5) {
             UnityEditor.EditorApplication.isPaused = true;
