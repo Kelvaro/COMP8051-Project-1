@@ -47,7 +47,7 @@ public class Fire : MonoBehaviour {
         Rad = Mathf.Asin(gravity * (Mathf.Sqrt(Mathf.Pow(GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z, 2) + Mathf.Pow(GameObject.Find("Target").transform.position.x, 2)) / Mathf.Pow(speed, 2)));
         degree = Rad * (180 / Mathf.PI);
         Alpha = (180 - degree) / 2;
-        GameObject.Find("GunCentre").transform.eulerAngles = new Vector3(-gunangle, degree/2, 0);
+        
 
         CAlpha = Mathf.Cos(Alpha * Mathf.PI / 180);
         SAlpha = Mathf.Sin(Alpha * Mathf.PI / 180);
@@ -55,7 +55,7 @@ public class Fire : MonoBehaviour {
         Gamma = Mathf.Asin(GameObject.Find("Target").transform.position.x / Mathf.Sqrt(Mathf.Pow(GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z, 2) + Mathf.Pow(GameObject.Find("Target").transform.position.x , 2) ));
         CGamma = Mathf.Cos(Gamma);
         SGamma = Mathf.Sin(Gamma);
-
+        GameObject.Find("GunCentre").transform.eulerAngles = new Vector3(-gunangle, Gamma * 180 / Mathf.PI, 0);
         SpeedYI = speed * CAlpha;
     }
 	
@@ -67,9 +67,9 @@ public class Fire : MonoBehaviour {
         frame++;
         tick += Time.deltaTime * frame;
         positionZ = GameObject.Find("GunCentre").transform.position.z + (speed * SAlpha * CGamma) * timeelapsed;
-        positionY = SpeedY * timeelapsed - ((-gravity * timeelapsed * timeelapsed)/ 2);
+        
         SpeedY = SpeedYI - gravity * timeelapsed;
-
+        positionY = (SpeedY * timeelapsed) - ((-gravity * Mathf.Pow(timeelapsed, 2) / 2));
         positionX = GameObject.Find("GunCentre").transform.position.x + (speed * SAlpha * SGamma) * timeelapsed;
 
         GameObject.Find("Gunball(Clone)").transform.position = new Vector3(positionX,positionY,positionZ);
