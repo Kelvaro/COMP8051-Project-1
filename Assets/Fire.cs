@@ -51,7 +51,7 @@ public class Fire : MonoBehaviour {
 
         CAlpha = Mathf.Cos(Alpha * Mathf.PI / 180);
         SAlpha = Mathf.Sin(Alpha * Mathf.PI / 180);
-
+        
         Gamma = Mathf.Asin(GameObject.Find("Target").transform.position.x / Mathf.Sqrt(Mathf.Pow(GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z, 2) + Mathf.Pow(GameObject.Find("Target").transform.position.x , 2) ));
         CGamma = Mathf.Cos(Gamma);
         SGamma = Mathf.Sin(Gamma);

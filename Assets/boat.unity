@@ -539,7 +539,17 @@ MonoBehaviour:
   sAngle: 0
   tick: 0
   range: 0
-  twoA: 0
+  Rad: 0
+  degree: 0
+  Alpha: 0
+  positionX: 0
+  CAlpha: 0
+  SAlpha: 0
+  Gamma: 0
+  CGamma: 0
+  SGamma: 0
+  SpeedYI: 0
+  SpeedY: 0
 --- !u!1 &1243401576
 GameObject:
   m_ObjectHideFlags: 0
