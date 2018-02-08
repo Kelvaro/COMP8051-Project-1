@@ -32,6 +32,13 @@ public class Fire : MonoBehaviour {
 
     public float SpeedYI;
     public float SpeedY;
+
+    public float OmegaI;
+    public float OmegaF;
+    public float AngularAlpha; // represents Angular acceleration
+    public float Theta;
+    public float AngularDegree;
+    public float FTheta;
    
 	// Use this for initialization
 	void Start () {
@@ -72,8 +79,18 @@ public class Fire : MonoBehaviour {
         positionY = (SpeedY * timeelapsed) - ((-gravity * Mathf.Pow(timeelapsed, 2) / 2));
         positionX = GameObject.Find("GunCentre").transform.position.x + (speed * SAlpha * SGamma) * timeelapsed;
 
+       
+        Theta = (OmegaF * Time.deltaTime) + ((AngularAlpha * Time.deltaTime * Time.deltaTime) / 2f);
+        OmegaF = OmegaI + AngularAlpha * timeelapsed;
+        FTheta += Theta;
+
+        AngularDegree = Theta * Mathf.Rad2Deg;
+   
+        
         GameObject.Find("Gunball(Clone)").transform.position = new Vector3(positionX,positionY,positionZ);
-     
+       // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
+        GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
+
         if (positionY <= 0.05 && tick > 0.5) {
             UnityEditor.EditorApplication.isPaused = true;
         }
