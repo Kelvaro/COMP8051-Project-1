@@ -6,7 +6,7 @@ using UnityEngine;
 public class Pilot : MonoBehaviour {
 
 
-    public static int PilotMass = 80;
+    public static int PilotMass = 500;
     public double PilotMomentOfInertia;
     public static double PMoI;
     GameObject pilot;

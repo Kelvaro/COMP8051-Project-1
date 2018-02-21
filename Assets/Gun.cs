@@ -6,7 +6,7 @@ using UnityEngine;
 public class Gun : MonoBehaviour {
 
 
-    public static int GunMass = 120;
+    public static int GunMass = 0;
     public double GunMomentOfInertia;
     public static double GMoI;
 	// Use this for initialization
