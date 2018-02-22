@@ -25,7 +25,7 @@ public class Acceleration : MonoBehaviour {
 
     public float distance;
     public int COMMass;
-    public float speed;
+    public float CurPos;
 	// Use this for initialization
 	void Start () {
         //position = (velocityinitial * timeelapsed) + ((1 / 2) * (acceleration * timeelapsed * timeelapsed));
@@ -57,14 +57,17 @@ public class Acceleration : MonoBehaviour {
         timeelapsed = Time.fixedDeltaTime * frame;
         frame++;
 
-        speed = acceleration * timeelapsed;
-        positionZ = (Mathf.Sqrt(2*distance/acceleration)) * timeelapsed;
+        CurPos = (acceleration * timeelapsed * timeelapsed) / 2;
+        positionZ = (Mathf.Sqrt((2*distance)/acceleration));
 
-        transform.position = new Vector3(0, 0, speed);
+        //positionZ=(speed * timeelapsed) + ((acceleration * timeelapsed * timeelapsed) / 2);
 
-        if (positionZ >= distance) {
+        transform.position = new Vector3(0, 0, CurPos);
+
+        if (CurPos >= distance) {
             UnityEditor.EditorApplication.isPaused = true;
         }
+        
 
         /* if (damped) {
 
