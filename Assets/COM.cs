@@ -18,37 +18,38 @@ public class COM : MonoBehaviour {
     public double PilotMH2;
     public double PilotTotalMomentOfInertia;
     public double COMTotalMomentofInertia;
-
+    public static float COMItotal;
 
     // Use this for initialization
     void Start () {
-     
+
         calculateCOM();
         
-        Debug.Log("The mass of COM is: " + COMPoSx + "m, " + COMPoSz+"m" );
+     
 
         HullH2 = Math.Pow((GameObject.Find("COM").transform.position.x) - (GameObject.Find("Hull").transform.position.x), 2) + Math.Pow((GameObject.Find("COM").transform.position.z) - (GameObject.Find("Hull").transform.position.z), 2); 
-        Debug.Log("The Hull H2 is: " + HullH2);
+      
 
         HullMH2 = HullH2 * Boat.HullMass;
 
         HullTotalMomentOfInertia = Boat.HMoI + HullMH2;
-        Debug.Log(Boat.HMoI + " check value");
+        
 
         GunH2 = Math.Pow((GameObject.Find("COM").transform.position.x) - (GameObject.Find("GunCentre").transform.position.x), 2) + Math.Pow((GameObject.Find("COM").transform.position.z) - (GameObject.Find("GunCentre").transform.position.z), 2);
-        Debug.Log("The Gun H2 is: " + HullH2);
-
+     
         GunMH2 = GunH2 * Gun.GunMass;
 
         GunTotalMomentOfInertia = Gun.GMoI + GunMH2;
       
 
         PilotH2 = Math.Pow((GameObject.Find("COM").transform.position.x) - (GameObject.Find("Pilot").transform.position.x), 2) + Math.Pow((GameObject.Find("COM").transform.position.z) - (GameObject.Find("Pilot").transform.position.z), 2);
-        Debug.Log("The Pilot H2 is: " + HullH2);
+       
 
         PilotMH2 = PilotH2 * Pilot.PilotMass;
 
         PilotTotalMomentOfInertia = PilotMH2 + Pilot.PMoI;
+        
+
     }
 
     void calculateCOM() {
@@ -57,6 +58,10 @@ public class COM : MonoBehaviour {
         COMPoSx = ((Gun.GunMass * GameObject.Find("GunCentre").transform.position.x) + (Boat.HullMass * GameObject.Find("Hull").transform.position.x) + (Pilot.PilotMass * GameObject.Find("Pilot").transform.position.x)) / TMass;
 
         transform.position = new Vector3(COMPoSx,0,COMPoSz);
+
+
+        COMTotalMomentofInertia = HullTotalMomentOfInertia + GunTotalMomentOfInertia + PilotTotalMomentOfInertia;
+        COMItotal = (float)COMTotalMomentofInertia;
 
 
     }
@@ -80,6 +85,5 @@ public class COM : MonoBehaviour {
 
         PilotTotalMomentOfInertia = PilotMH2 + Pilot.PMoI;
 
-        COMTotalMomentofInertia = HullTotalMomentOfInertia + GunTotalMomentOfInertia + PilotTotalMomentOfInertia;
     }
 }
