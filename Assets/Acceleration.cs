@@ -21,8 +21,11 @@ public class Acceleration : MonoBehaviour {
     public float SThrust;
     public float CThrust;
     public float positionZ;
+    public float angle;
 
-    
+    public float distance;
+    public int COMMass;
+    public float speed;
 	// Use this for initialization
 	void Start () {
         //position = (velocityinitial * timeelapsed) + ((1 / 2) * (acceleration * timeelapsed * timeelapsed));
@@ -39,9 +42,10 @@ public class Acceleration : MonoBehaviour {
         }*/
 
 
-        SThrust = Force * Mathf.Sin((GameObject.Find("boat").transform.eulerAngles.y * Mathf.PI) / 180);
-        CThrust = Force * Mathf.Cos((GameObject.Find("boat").transform.eulerAngles.y * Mathf.PI) / 180);
-
+        SThrust = Force * Mathf.Sin((angle * Mathf.PI) / 180);
+        CThrust = Force * Mathf.Cos((angle * Mathf.PI) / 180);
+        acceleration = CThrust / Boat.TotalM;
+        COMMass = Boat.TotalM;
     }
 	
 	// Update is called once per frame
@@ -51,9 +55,17 @@ public class Acceleration : MonoBehaviour {
 
 
         timeelapsed = Time.fixedDeltaTime * frame;
+        frame++;
 
+        speed = acceleration * timeelapsed;
+        positionZ = (Mathf.Sqrt(2*distance/acceleration)) * timeelapsed;
 
-        GameObject.Find("Gunball(Clone)").transform.position = new Vector3(0, 0, positionZ);
+        transform.position = new Vector3(0, 0, speed);
+
+        if (positionZ >= distance) {
+            UnityEditor.EditorApplication.isPaused = true;
+        }
+
         /* if (damped) {
 
 
