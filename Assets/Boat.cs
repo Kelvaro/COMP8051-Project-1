@@ -6,7 +6,7 @@ using UnityEngine;
 public class Boat : MonoBehaviour {
 
    
-    public static int HullMass = 500;
+    public static int HullMass = 15500;
     public int TotalMass;
     public static int TotalM;
     public double HullMomentOfInertia;
