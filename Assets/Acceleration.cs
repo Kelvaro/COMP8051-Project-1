@@ -44,6 +44,11 @@ public class Acceleration : MonoBehaviour
     public float leftDistance, rightDistance;
 
 
+    public float DragConstant;
+    public float DepthTotalTime;
+    public float X, V, A;
+
+
     // Use this for initialization
     void Start()
     {
@@ -116,6 +121,7 @@ public class Acceleration : MonoBehaviour
         }
 
 
+        X = (LinearForce / (DragConstant * DepthTotalTime)) + (LinearForce - DragConstant * 0) / (DragConstant * COMMass) / (DragConstant * (Mathf.Exp(-DragConstant * DepthTotalTime / COMMass) - 1));
 
 
 

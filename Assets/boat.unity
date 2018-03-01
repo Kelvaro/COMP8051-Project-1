@@ -515,11 +515,11 @@ MonoBehaviour:
   frame: 0
   damped: 0
   curPos: 0
-  LinearForce: 1000
+  LinearForce: 40000
   SThrust: 0
   CThrust: 0
   positionZ: 0
-  angle: 15
+  angle: 0
   distance: 16
   COMMass: 0
   CurPos: 0
@@ -543,6 +543,11 @@ MonoBehaviour:
   RV: 0
   leftDistance: 0
   rightDistance: 0
+  DragConstant: 16000
+  DepthTotalTime: 2
+  X: 0
+  V: 0
+  A: 0
 --- !u!114 &1016500186
 MonoBehaviour:
   m_ObjectHideFlags: 0
