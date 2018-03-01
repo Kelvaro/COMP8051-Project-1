@@ -29,7 +29,7 @@ public class Acceleration : MonoBehaviour
     public int COMMass;
     public float CurPos;
 
-
+    public bool linear;
     public float AngularForce, AngularSinForce, AngularCosForce;
     public float RLeftX, RLeftZ;
     public float RRightX, RRightZ;
@@ -98,7 +98,7 @@ public class Acceleration : MonoBehaviour
         timeelapsed = Time.fixedDeltaTime * frame;
         frame++;
 
-        CurPos = (LinearAcceleration * timeelapsed * timeelapsed) / 2;
+        CurPos = transform.position.z + (LinearAcceleration * timeelapsed * timeelapsed) / 2;
         positionZ = (Mathf.Sqrt((2 * distance) / LinearAcceleration));
 
         //positionZ=(speed * timeelapsed) + ((acceleration * timeelapsed * timeelapsed) / 2);
@@ -106,19 +106,40 @@ public class Acceleration : MonoBehaviour
         TV = Mathf.Abs(AccelerationLeft) * timeelapsed;
         RV = Mathf.Abs(AccelerationRight) * timeelapsed;
 
-        Tleft = (AccelerationLeft * (timeelapsed * timeelapsed)) / 2;
+        Tleft = 0 + AccelerationLeft * (timeelapsed * timeelapsed) ;
         TRight = (AccelerationRight * (timeelapsed * timeelapsed)) / 2;
 
-        transform.position = new Vector3(0, 0, CurPos);
-        //transform.eulerAngles = new Vector3(Tleft, TRight, 0);
+       //transform.position = new Vector3(0, 0, CurPos);
+      
+       //transform.eulerAngles = new Vector3(Tleft, 0, 0);
+        transform.Rotate(Vector3.up, Tleft);
 
 
+        if (linear)
+        {
+            transform.position = Vector3.forward * CurPos;
+            if (CurPos >= distance)
+            {
+                UnityEditor.EditorApplication.isPaused = true;
+            }
 
+        }
+        else {
 
-        if (CurPos >= distance)
+            
+            transform.Rotate(Vector3.up, Mathf.Rad2Deg*Tleft);
+            if (transform.eulerAngles.y <= Mathf.Rad2Deg *leftDistance) {
+                UnityEditor.EditorApplication.isPaused = true;
+            }
+
+        }
+      
+
+        /*if (CurPos >= distance /*|| transform.position.x >= displacementLeft || transform.position.y >= displacementRight)
         {
             UnityEditor.EditorApplication.isPaused = true;
-        }
+        } */
+
 
 
         X = (LinearForce / (DragConstant * DepthTotalTime)) + (LinearForce - DragConstant * 0) / (DragConstant * COMMass) / (DragConstant * (Mathf.Exp(-DragConstant * DepthTotalTime / COMMass) - 1));
