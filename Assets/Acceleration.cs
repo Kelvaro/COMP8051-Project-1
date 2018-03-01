@@ -38,7 +38,7 @@ public class Acceleration : MonoBehaviour
     public float ITotal;
 
     public float displacementLeft, displacementRight;
-    public float Tleft, TRight;
+    public float Tleft, TRight; //represents the displacement left or right
     public float TV, RV;
 
     public float leftDistance, rightDistance;
@@ -104,7 +104,7 @@ public class Acceleration : MonoBehaviour
         Tleft = (AccelerationLeft * (timeelapsed * timeelapsed)) / 2;
         TRight = (AccelerationRight * (timeelapsed * timeelapsed)) / 2;
 
-        transform.position = new Vector3(Tleft, 0, CurPos);
+        transform.position = new Vector3(0, 0, CurPos);
         //transform.eulerAngles = new Vector3(Tleft, TRight, 0);
 
 
