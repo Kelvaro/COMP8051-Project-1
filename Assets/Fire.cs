@@ -46,6 +46,9 @@ public class Fire : MonoBehaviour {
     public float Tau;
     public float Vw;
     public float Cw;
+
+    public float vx, vy, vz;
+    public float DragVz, DragVx; // drag velocity? Wz? Wx?
    
 	// Use this for initialization
 	void Start () {
@@ -70,11 +73,16 @@ public class Fire : MonoBehaviour {
         CGamma = Mathf.Cos(Gamma);
         SGamma = Mathf.Sin(Gamma);
         GameObject.Find("GunCentre").transform.eulerAngles = new Vector3(-gunangle, Gamma * 180 / Mathf.PI, 0);
-        SpeedYI = speed * CAlpha;
+        SpeedYI = speed * CAlpha; // what was this again?
 
         Tau = Kilogram / Cd;
 
+        vx = speed*CGamma*SAlpha; //velocity of x in project 7?
+        vy = speed * CAlpha;//velocity of y in project 7?
+        vz = speed * SGamma * SAlpha; // velocity of z in project 7?
 
+        DragVz = ((Cw * Vw * CGamma) / Cd);
+        DragVx = ((Cw * Vw * SGamma) / Cd  ); 
     }
 	
 	// Update is called once per frame
@@ -86,8 +94,8 @@ public class Fire : MonoBehaviour {
         tick += Time.deltaTime * frame;
        // positionZ = GameObject.Find("GunCentre").transform.position.z + (speed * SAlpha * CGamma) * timeelapsed;
 
-        positionZ = (speed * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) + (Vw * Tau * (1 - Mathf.Exp(-timeelapsed / Tau)))  - (Vw * timeelapsed); // project 7 Q 3a
-        speed = (Mathf.Exp(-timeelapsed / Tau) * speed) + ((Mathf.Exp(-timeelapsed/Tau) - 1) * Vw); // project 7 Q 3a
+        positionZ = GameObject.Find("GunCentre").transform.position.z + (vz * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) + (DragVz * Tau * (1 - Mathf.Exp(-timeelapsed / Tau)))  - (DragVz * timeelapsed); // project 7 Q 3a
+        vz = (Mathf.Exp(-timeelapsed / Tau) * vz) + ((Mathf.Exp(-timeelapsed/Tau) - 1) * DragVz); // project 7 Q 3a
 
 
 
@@ -95,11 +103,11 @@ public class Fire : MonoBehaviour {
         positionY = (SpeedY * timeelapsed) - ((-gravity * Mathf.Pow(timeelapsed, 2) / 2));
         positionX = GameObject.Find("GunCentre").transform.position.x + (speed * SAlpha * SGamma) * timeelapsed;   */
 
-        positionY = SpeedYI + (SpeedY * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) + (gravity * (Mathf.Pow(Tau, 2)) * (1 - Mathf.Exp(-timeelapsed / Tau))) - (gravity*Tau*timeelapsed);  // project 7 Q 3b
-        SpeedY = (Mathf.Exp(-timeelapsed / Tau) * SpeedY) + ((Mathf.Exp(-timeelapsed / Tau) - 1) * (gravity * Tau) ); // project 7 Q 3b
+        positionY =  (vy * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) + (gravity * Tau * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) - (gravity*Tau*timeelapsed);  // project 7 Q 3b
+        vy = (Mathf.Exp(-timeelapsed / Tau) * vy) + ((Mathf.Exp(-timeelapsed / Tau) - 1) * (gravity * Tau) ); // project 7 Q 3b
 
-        positionX = ((speed * Tau) * (1 - Mathf.Exp(-timeelapsed / Tau))) +  ( (Vw * Tau) * (1 - Mathf.Exp(-timeelapsed / Tau))  ) - (Vw * timeelapsed)  ; // project 7 Q 3c
-
+        positionX = GameObject.Find("GunCentre").transform.position.x + ((vx * Tau) * (1 - Mathf.Exp(-timeelapsed / Tau))) +  ( (Vw * Tau) * (1 - Mathf.Exp(-timeelapsed / Tau))  ) - (Vw * timeelapsed)  ; // project 7 Q 3c
+        vx = (Mathf.Exp(-timeelapsed / Tau) * vx) + ((Mathf.Exp(-timeelapsed / Tau) - 1) * DragVx); // project 7 Q 3c
 
 
 
@@ -111,13 +119,13 @@ public class Fire : MonoBehaviour {
         AngularDegree = Theta * Mathf.Rad2Deg;
    
         
-        GameObject.Find("Gunball(Clone)").transform.position = new Vector3(positionX,positionY,positionZ);
+        GameObject.Find("Gunball(Clone)").transform.position = new Vector3(positionX,positionY, -positionZ);
        // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
        // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
 
-        if (positionY <= 0.05 && tick > 0.5) {
+      /*  if (positionY <= 0.05 && tick > 0.5) {
             UnityEditor.EditorApplication.isPaused = true;
-        }
+        }*/
 
 	}
 }
