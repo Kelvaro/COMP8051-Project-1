@@ -22,6 +22,7 @@ public class Fire : MonoBehaviour {
     public float Rad;
     public float degree;
     public float Alpha;
+    public float TwoAlpha;
     public float positionX;
     public float CAlpha;
     public float SAlpha;
@@ -39,6 +40,12 @@ public class Fire : MonoBehaviour {
     public float Theta;
     public float AngularDegree;
     public float FTheta;
+
+    public float Kilogram;
+    public float Cd;
+    public float Tau;
+    public float Vw;
+    public float Cw;
    
 	// Use this for initialization
 	void Start () {
@@ -64,6 +71,10 @@ public class Fire : MonoBehaviour {
         SGamma = Mathf.Sin(Gamma);
         GameObject.Find("GunCentre").transform.eulerAngles = new Vector3(-gunangle, Gamma * 180 / Mathf.PI, 0);
         SpeedYI = speed * CAlpha;
+
+        Tau = Kilogram / Cd;
+
+
     }
 	
 	// Update is called once per frame
@@ -73,14 +84,27 @@ public class Fire : MonoBehaviour {
         timeelapsed = Time.fixedDeltaTime * frame;
         frame++;
         tick += Time.deltaTime * frame;
-        positionZ = GameObject.Find("GunCentre").transform.position.z + (speed * SAlpha * CGamma) * timeelapsed;
-        
-        SpeedY = SpeedYI - gravity * timeelapsed;
-        positionY = (SpeedY * timeelapsed) - ((-gravity * Mathf.Pow(timeelapsed, 2) / 2));
-        positionX = GameObject.Find("GunCentre").transform.position.x + (speed * SAlpha * SGamma) * timeelapsed;
+       // positionZ = GameObject.Find("GunCentre").transform.position.z + (speed * SAlpha * CGamma) * timeelapsed;
 
-       
-        Theta = (OmegaF * Time.deltaTime) + ((AngularAlpha * Time.deltaTime * Time.deltaTime) / 2f);
+        positionZ = (speed * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) + (Vw * Tau * (1 - Mathf.Exp(-timeelapsed / Tau)))  - (Vw * timeelapsed); // project 7 Q 3a
+        speed = (Mathf.Exp(-timeelapsed / Tau) * speed) + ((Mathf.Exp(-timeelapsed/Tau) - 1) * Vw); // project 7 Q 3a
+
+
+
+     /*   SpeedY = SpeedYI - gravity * timeelapsed;
+        positionY = (SpeedY * timeelapsed) - ((-gravity * Mathf.Pow(timeelapsed, 2) / 2));
+        positionX = GameObject.Find("GunCentre").transform.position.x + (speed * SAlpha * SGamma) * timeelapsed;   */
+
+        positionY = SpeedYI + (SpeedY * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) + (gravity * (Mathf.Pow(Tau, 2)) * (1 - Mathf.Exp(-timeelapsed / Tau))) - (gravity*Tau*timeelapsed);  // project 7 Q 3b
+        SpeedY = (Mathf.Exp(-timeelapsed / Tau) * SpeedY) + ((Mathf.Exp(-timeelapsed / Tau) - 1) * (gravity * Tau) ); // project 7 Q 3b
+
+        positionX = ((speed * Tau) * (1 - Mathf.Exp(-timeelapsed / Tau))) +  ( (Vw * Tau) * (1 - Mathf.Exp(-timeelapsed / Tau))  ) - (Vw * timeelapsed)  ; // project 7 Q 3c
+
+
+
+
+
+        Theta = (OmegaF * Time.deltaTime) + ((AngularAlpha * Time.deltaTime * Time.deltaTime) / 2f); 
         OmegaF = OmegaI + AngularAlpha * timeelapsed;
         FTheta += Theta;
 
@@ -89,7 +113,7 @@ public class Fire : MonoBehaviour {
         
         GameObject.Find("Gunball(Clone)").transform.position = new Vector3(positionX,positionY,positionZ);
        // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
-        GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
+       // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
 
         if (positionY <= 0.05 && tick > 0.5) {
             UnityEditor.EditorApplication.isPaused = true;
