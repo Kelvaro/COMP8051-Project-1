@@ -119,14 +119,14 @@ public class Fire : MonoBehaviour {
 
         AngularDegree = Theta * Mathf.Rad2Deg;
         //Debug.Log(positionZ + ", " + positionY + ", " + positionX);
-        Debug.Log(positionX);
+        Debug.Log(positionX + ", "+ positionY + ", " + positionZ);
         GameObject.Find("Gunball(Clone)").transform.position = new Vector3(positionX,positionY, positionZ);
        // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
        // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
 
-      /*  if (positionY <= 0.05 && tick > 0.5) {
+      if (positionY <= 0.00 && tick > 0.5) {
             UnityEditor.EditorApplication.isPaused = true;
-        }*/
+        }
 
 	}
 }
