@@ -49,6 +49,10 @@ public class Fire : MonoBehaviour {
 
     public float vx, vy, vz;
     public float DragVz, DragVx; // drag velocity? Wz? Wx?
+
+    public float M1, M2;
+    public float ui, vi;
+    public float e;
    
 	// Use this for initialization
 	void Start () {
@@ -59,7 +63,7 @@ public class Fire : MonoBehaviour {
         
        
         Instantiate(gunball, GameObject.Find("GunCentre").transform.position, Quaternion.identity);
-
+        Debug.Log(GameObject.Find("GunCentre").transform.position);
        
         Rad = Mathf.Asin(gravity * (Mathf.Sqrt(Mathf.Pow(GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z, 2) + Mathf.Pow(GameObject.Find("Target").transform.position.x, 2)) / Mathf.Pow(speed, 2)));
         degree = Rad * (180 / Mathf.PI);
@@ -93,21 +97,21 @@ public class Fire : MonoBehaviour {
         timeelapsed = Time.fixedDeltaTime * frame;
         frame++;
         tick += Time.deltaTime * frame;
-       // positionZ = GameObject.Find("GunCentre").transform.position.z + (speed * SAlpha * CGamma) * timeelapsed;
+        // positionZ = GameObject.Find("GunCentre").transform.position.z + (speed * SAlpha * CGamma) * timeelapsed;
 
-        positionZ = vz * Tau * (1 - Mathf.Exp(-timeelapsed / Tau)) + DragVz * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))  - (DragVz * timeelapsed); // project 7 Q 3a
+        // positionZ = vz * Tau * (1 - Mathf.Exp(-timeelapsed / Tau)) + DragVz * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))  - (DragVz * timeelapsed); // project 7 Q 3a
         //vz = (Mathf.Exp(-timeelapsed / Tau) * vz) + ((Mathf.Exp(-timeelapsed/Tau) - 1) * DragVz); // project 7 Q 3a
-        
+        positionZ = ui * timeelapsed;
 
 
      /*   SpeedY = SpeedYI - gravity * timeelapsed;
         positionY = (SpeedY * timeelapsed) - ((-gravity * Mathf.Pow(timeelapsed, 2) / 2));
         positionX = GameObject.Find("GunCentre").transform.position.x + (speed * SAlpha * SGamma) * timeelapsed;   */
 
-        positionY =  (vy * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) + (gravity * Tau * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) - (gravity*Tau*timeelapsed);  // project 7 Q 3b
+       // positionY =  (vy * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) + (gravity * Tau * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) - (gravity*Tau*timeelapsed);  // project 7 Q 3b
         //vy = (Mathf.Exp(-timeelapsed / Tau) * vy) + ((Mathf.Exp(-timeelapsed / Tau) - 1) * (gravity * Tau) ); // project 7 Q 3b
 
-        positionX = vx * Tau * (1 - Mathf.Exp(-timeelapsed / Tau)) +  DragVx * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))   - (DragVx * timeelapsed)  ; // project 7 Q 3c
+      //  positionX = vx * Tau * (1 - Mathf.Exp(-timeelapsed / Tau)) +  DragVx * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))   - (DragVx * timeelapsed)  ; // project 7 Q 3c
         //vx = (Mathf.Exp(-timeelapsed / Tau) * vx) + ((Mathf.Exp(-timeelapsed / Tau) - 1) * DragVx); // project 7 Q 3c
 
 
@@ -119,12 +123,12 @@ public class Fire : MonoBehaviour {
 
         AngularDegree = Theta * Mathf.Rad2Deg;
         //Debug.Log(positionZ + ", " + positionY + ", " + positionX);
-        Debug.Log(positionX + ", "+ positionY + ", " + positionZ);
+        //Debug.Log(positionX + ", "+ positionY + ", " + positionZ);
         GameObject.Find("Gunball(Clone)").transform.position = new Vector3(positionX,positionY, positionZ);
        // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
        // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
 
-      if (positionY <= 0.00 && tick > 0.5) {
+      if () {
             UnityEditor.EditorApplication.isPaused = true;
         }
 
