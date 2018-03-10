@@ -53,6 +53,9 @@ public class Fire : MonoBehaviour {
     public float M1, M2;
     public float ui, vi;
     public float e;
+
+    public Collider gunballCollider;
+    public Collider targetCollider;
    
 	// Use this for initialization
 	void Start () {
@@ -87,13 +90,19 @@ public class Fire : MonoBehaviour {
         //Note that Shaun got Vz and vx mixed up on the Excel Formula sheet.
 
         DragVz = ((Cw * Vw * CGamma) / Cd);
-        DragVx = ((Cw * Vw * SGamma) / Cd  ); 
-    }
-	
-	// Update is called once per frame
-	void FixedUpdate () {
+        DragVx = ((Cw * Vw * SGamma) / Cd  );
 
-        
+
+        gunballCollider = GameObject.Find("Gunball(Clone)").GetComponent<SphereCollider>();
+        targetCollider = GameObject.Find("Target").GetComponent<SphereCollider>();
+       
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+
+
         timeelapsed = Time.fixedDeltaTime * frame;
         frame++;
         tick += Time.deltaTime * frame;
@@ -104,33 +113,60 @@ public class Fire : MonoBehaviour {
         positionZ = ui * timeelapsed;
 
 
-     /*   SpeedY = SpeedYI - gravity * timeelapsed;
-        positionY = (SpeedY * timeelapsed) - ((-gravity * Mathf.Pow(timeelapsed, 2) / 2));
-        positionX = GameObject.Find("GunCentre").transform.position.x + (speed * SAlpha * SGamma) * timeelapsed;   */
+        /*   SpeedY = SpeedYI - gravity * timeelapsed;
+           positionY = (SpeedY * timeelapsed) - ((-gravity * Mathf.Pow(timeelapsed, 2) / 2));
+           positionX = GameObject.Find("GunCentre").transform.position.x + (speed * SAlpha * SGamma) * timeelapsed;   */
 
-       // positionY =  (vy * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) + (gravity * Tau * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) - (gravity*Tau*timeelapsed);  // project 7 Q 3b
+        // positionY =  (vy * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) + (gravity * Tau * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))) - (gravity*Tau*timeelapsed);  // project 7 Q 3b
         //vy = (Mathf.Exp(-timeelapsed / Tau) * vy) + ((Mathf.Exp(-timeelapsed / Tau) - 1) * (gravity * Tau) ); // project 7 Q 3b
 
-      //  positionX = vx * Tau * (1 - Mathf.Exp(-timeelapsed / Tau)) +  DragVx * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))   - (DragVx * timeelapsed)  ; // project 7 Q 3c
+        //  positionX = vx * Tau * (1 - Mathf.Exp(-timeelapsed / Tau)) +  DragVx * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))   - (DragVx * timeelapsed)  ; // project 7 Q 3c
         //vx = (Mathf.Exp(-timeelapsed / Tau) * vx) + ((Mathf.Exp(-timeelapsed / Tau) - 1) * DragVx); // project 7 Q 3c
 
 
 
 
-        Theta = (OmegaF * Time.deltaTime) + ((AngularAlpha * Time.deltaTime * Time.deltaTime) / 2f); 
+        Theta = (OmegaF * Time.deltaTime) + ((AngularAlpha * Time.deltaTime * Time.deltaTime) / 2f);
         OmegaF = OmegaI + AngularAlpha * timeelapsed;
         FTheta += Theta;
 
         AngularDegree = Theta * Mathf.Rad2Deg;
         //Debug.Log(positionZ + ", " + positionY + ", " + positionX);
         //Debug.Log(positionX + ", "+ positionY + ", " + positionZ);
-        GameObject.Find("Gunball(Clone)").transform.position = new Vector3(positionX,positionY, positionZ);
-       // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
-       // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
+        GameObject.Find("Gunball(Clone)").transform.position = new Vector3(positionX, positionY, positionZ);
+        // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
+        // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
 
-      if () {
-            UnityEditor.EditorApplication.isPaused = true;
+        
+
+
+
+    }
+
+
+
+   void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.tag == "test") {
+            Debug.Log("collided");
         }
 
-	}
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "gunball")
+        {
+            Debug.Log("collided");
+        }
+
+        Debug.Log("collided");
+    }
+
+    
+
+
+
+
+
 }
