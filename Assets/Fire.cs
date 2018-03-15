@@ -11,7 +11,7 @@ public class Fire : MonoBehaviour {
     private float gravity = 9.81f;
     public GameObject gunball;
     public float timeelapsed;
-    public float positionZ;
+    public float positionZ, positionZf;
     public float positionY;
     public float frame;
     public float cAngle;
@@ -53,9 +53,10 @@ public class Fire : MonoBehaviour {
     public float M1, M2;
     public float ui, vi;
     public float e;
+    public bool collided;
+    public float J, vr, uf, vf;
 
-    public Collider gunballCollider;
-    public Collider targetCollider;
+    public float M2i, M2izm, M2f; //M2 initial velocity and position
    
 	// Use this for initialization
 	void Start () {
@@ -65,7 +66,7 @@ public class Fire : MonoBehaviour {
         sAngle = Mathf.Sin(gunangle * Mathf.PI / 180);
         
        
-        Instantiate(gunball, GameObject.Find("GunCentre").transform.position, Quaternion.identity);
+        //Instantiate(gunball, GameObject.Find("GunCentre").transform.position, Quaternion.identity);
         Debug.Log(GameObject.Find("GunCentre").transform.position);
        
         Rad = Mathf.Asin(gravity * (Mathf.Sqrt(Mathf.Pow(GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z, 2) + Mathf.Pow(GameObject.Find("Target").transform.position.x, 2)) / Mathf.Pow(speed, 2)));
@@ -79,7 +80,7 @@ public class Fire : MonoBehaviour {
         Gamma = Mathf.Asin(GameObject.Find("Target").transform.position.x / Mathf.Sqrt(Mathf.Pow(GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z, 2) + Mathf.Pow(GameObject.Find("Target").transform.position.x , 2) ));
         CGamma = Mathf.Cos(Gamma);
         SGamma = Mathf.Sin(Gamma);
-        GameObject.Find("GunCentre").transform.eulerAngles = new Vector3(-gunangle, Gamma * 180 / Mathf.PI, 0);
+        //GameObject.Find("GunCentre").transform.eulerAngles = new Vector3(-gunangle, Gamma * 180 / Mathf.PI, 0); //Commented out for Project 9
         SpeedYI = speed * CAlpha; // what was this again?
 
         Tau = Kilogram / Cd;
@@ -92,10 +93,14 @@ public class Fire : MonoBehaviour {
         DragVz = ((Cw * Vw * CGamma) / Cd);
         DragVx = ((Cw * Vw * SGamma) / Cd  );
 
+        collided = false;
+        //gunballCollider = GameObject.Find("Gunball").GetComponent<SphereCollider>();
+        // targetCollider = GameObject.Find("Target").GetComponent<SphereCollider>();
 
-        gunballCollider = GameObject.Find("Gunball(Clone)").GetComponent<SphereCollider>();
-        targetCollider = GameObject.Find("Target").GetComponent<SphereCollider>();
-       
+        vr = ui - vi;
+        J = -vr * (e + 1) * M1 * M2 / (M1 + M2);
+        vf = -J / M2 + vi;
+        uf = J / M1 + ui;
     }
 
     // Update is called once per frame
@@ -110,7 +115,7 @@ public class Fire : MonoBehaviour {
 
         // positionZ = vz * Tau * (1 - Mathf.Exp(-timeelapsed / Tau)) + DragVz * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))  - (DragVz * timeelapsed); // project 7 Q 3a
         //vz = (Mathf.Exp(-timeelapsed / Tau) * vz) + ((Mathf.Exp(-timeelapsed/Tau) - 1) * DragVz); // project 7 Q 3a
-        positionZ = ui * timeelapsed;
+        
 
 
         /*   SpeedY = SpeedYI - gravity * timeelapsed;
@@ -129,11 +134,30 @@ public class Fire : MonoBehaviour {
         Theta = (OmegaF * Time.deltaTime) + ((AngularAlpha * Time.deltaTime * Time.deltaTime) / 2f);
         OmegaF = OmegaI + AngularAlpha * timeelapsed;
         FTheta += Theta;
-
         AngularDegree = Theta * Mathf.Rad2Deg;
+
+        if (collided == false)
+        {
+            
+           
+            M2i = M2 * vi * timeelapsed;
+            
+            positionZ = M1 * ui * timeelapsed;
+
+            GameObject.Find("Gunball").transform.position = new Vector3(positionX, positionY, positionZ);
+            GameObject.Find("Target").transform.position = new Vector3(0, 0, M2i);
+        }
+        else if (collided == true) {
+
+            positionZf = M1 * uf * Time.deltaTime;
+            M2f = M2 * vf * Time.deltaTime;
+
+        }
         //Debug.Log(positionZ + ", " + positionY + ", " + positionX);
         //Debug.Log(positionX + ", "+ positionY + ", " + positionZ);
-        GameObject.Find("Gunball(Clone)").transform.position = new Vector3(positionX, positionY, positionZ);
+       
+        
+        
         // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
         // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
 
@@ -147,21 +171,16 @@ public class Fire : MonoBehaviour {
 
    void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.tag == "test") {
+       
             Debug.Log("collided");
-        }
+            collided = true;
+            UnityEditor.EditorApplication.isPaused = true;
 
+            
+   
     }
 
-    public void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "gunball")
-        {
-            Debug.Log("collided");
-        }
 
-        Debug.Log("collided");
-    }
 
     
 

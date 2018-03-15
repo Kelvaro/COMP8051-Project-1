@@ -113,6 +113,58 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &155863680
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4413477888364880, guid: ebd2a2e921bec754fbc5da833da83c75, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413477888364880, guid: ebd2a2e921bec754fbc5da833da83c75, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413477888364880, guid: ebd2a2e921bec754fbc5da833da83c75, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413477888364880, guid: ebd2a2e921bec754fbc5da833da83c75, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413477888364880, guid: ebd2a2e921bec754fbc5da833da83c75, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413477888364880, guid: ebd2a2e921bec754fbc5da833da83c75, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413477888364880, guid: ebd2a2e921bec754fbc5da833da83c75, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4413477888364880, guid: ebd2a2e921bec754fbc5da833da83c75, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 54361312014117212, guid: ebd2a2e921bec754fbc5da833da83c75,
+        type: 2}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 54361312014117212, guid: ebd2a2e921bec754fbc5da833da83c75,
+        type: 2}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ebd2a2e921bec754fbc5da833da83c75, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &164718499
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,8 +354,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 372804717}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 16}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1016500183}
@@ -350,8 +402,8 @@ BoxCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 372804717}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
+  m_IsTrigger: 1
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -487,6 +539,8 @@ GameObject:
   - component: {fileID: 1016500185}
   - component: {fileID: 1016500186}
   - component: {fileID: 1016500187}
+  - component: {fileID: 1016500188}
+  - component: {fileID: 1016500189}
   m_Layer: 0
   m_Name: boat
   m_TagString: test
@@ -501,7 +555,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1016500182}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 4}
+  m_LocalPosition: {x: 0, y: 0, z: -35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 164718503}
@@ -633,10 +687,17 @@ MonoBehaviour:
   DragVz: 0
   DragVx: 0
   M1: 1
-  M2: 2
+  M2: 3
   ui: 25
   vi: 2
   e: 1
+  collided: 0
+  J: 0
+  vr: 0
+  uf: 0
+  vf: 0
+  M2i: 0
+  M2iz: 0
   gunballCollider: {fileID: 0}
   targetCollider: {fileID: 0}
 --- !u!54 &1016500187
@@ -649,11 +710,35 @@ Rigidbody:
   m_Mass: 0.0000001
   m_Drag: 0
   m_AngularDrag: 0
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &1016500188
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1016500182}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &1016500189
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1016500182}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1243401576
 GameObject:
   m_ObjectHideFlags: 0
@@ -832,6 +917,78 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 27.599, y: 0, z: 0}
+--- !u!1 &1696120876 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1710527520375002, guid: ebd2a2e921bec754fbc5da833da83c75,
+    type: 2}
+  m_PrefabInternal: {fileID: 155863680}
+--- !u!114 &1696120883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1696120876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c68f6b2a84ce917478a13a703dce2aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angle: 0
+  gunangle: 0
+  GunVelocityInitial: 0
+  GunVelocity: 0
+  speed: 0
+  gunball: {fileID: 0}
+  timeelapsed: 0
+  positionZ: 0
+  positionY: 0
+  frame: 0
+  cAngle: 0
+  sAngle: 0
+  tick: 0
+  range: 0
+  Rad: 0
+  degree: 0
+  Alpha: 0
+  TwoAlpha: 0
+  positionX: 0
+  CAlpha: 0
+  SAlpha: 0
+  Gamma: 0
+  CGamma: 0
+  SGamma: 0
+  SpeedYI: 0
+  SpeedY: 0
+  OmegaI: 0
+  OmegaF: 0
+  AngularAlpha: 0
+  Theta: 0
+  AngularDegree: 0
+  FTheta: 0
+  Kilogram: 0
+  Cd: 0
+  Tau: 0
+  Vw: 0
+  Cw: 0
+  vx: 0
+  vy: 0
+  vz: 0
+  DragVz: 0
+  DragVx: 0
+  M1: 1
+  M2: 3
+  ui: 25
+  vi: 2
+  e: 1
+  collided: 0
+  J: 0
+  vr: 0
+  uf: 0
+  vf: 0
+  M2i: 0
+  M2iz: 0
+  gunballCollider: {fileID: 0}
+  targetCollider: {fileID: 0}
 --- !u!1 &1980224427
 GameObject:
   m_ObjectHideFlags: 0
