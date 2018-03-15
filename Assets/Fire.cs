@@ -10,6 +10,7 @@ public class Fire : MonoBehaviour {
     public float speed;
     private float gravity = 9.81f;
     public GameObject gunball;
+    public GameObject target;
     public float timeelapsed;
     public float positionZ, positionZf;
     public float positionY;
@@ -50,16 +51,25 @@ public class Fire : MonoBehaviour {
     public float vx, vy, vz;
     public float DragVz, DragVx; // drag velocity? Wz? Wx?
 
-    public float M1, M2;
-    public float ui, vi;
+    public float M1, M2; // Mass of Gunball and Target
+    public float ui, vi; // Speed of GUnball and Target
     public float e;
     public bool collided;
     public float J, vr, uf, vf;
 
+    public float M1i, M1f;
     public float M2i, M2izm, M2f; //M2 initial velocity and position
-   
+    public float Zg, Zt;// position of gunball and target
+
+    Vector3 ipg, ipt; //initial position of gunball and target
+
+    public float TotalI, TotalF;
+
 	// Use this for initialization
 	void Start () {
+        ipg = gunball.transform.position;
+        ipt = target.transform.position;
+
         angle = (Mathf.Asin(gravity * (GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z) / Mathf.Pow(speed,2))/2 ) ;
         gunangle = angle * 180 / Mathf.PI;
         cAngle = Mathf.Cos(gunangle * Mathf.PI/ 180);
@@ -101,6 +111,9 @@ public class Fire : MonoBehaviour {
         J = -vr * (e + 1) * M1 * M2 / (M1 + M2);
         vf = -J / M2 + vi;
         uf = J / M1 + ui;
+
+
+
     }
 
     // Update is called once per frame
@@ -140,30 +153,43 @@ public class Fire : MonoBehaviour {
         {
             
            
-            M2i = M2 * vi * timeelapsed;
+            M2i =M2 * vi;
+            M1i = M1 * ui;
+            Zg = M1i * timeelapsed;
+            Zt = ipt + M2i * timeelapsed;
+            TotalI = M2i + M1i;
+            GameObject.Find("Gunball").transform.position = new Vector3(positionX, positionY, Zg);
+            GameObject.Find("Target").transform.position = new Vector3(0, 0, Zt);
+            gunball.transform.position = Vector3.forward * 
             
-            positionZ = M1 * ui * timeelapsed;
-
-            GameObject.Find("Gunball").transform.position = new Vector3(positionX, positionY, positionZ);
-            GameObject.Find("Target").transform.position = new Vector3(0, 0, M2i);
         }
-        else if (collided == true) {
+        if (collided == true) {
 
-            positionZf = M1 * uf * Time.deltaTime;
-            M2f = M2 * vf * Time.deltaTime;
+            M1f = M1 * uf;
+            Zg = ipg + M1f * timeelapsed;
 
+            M2f = M2 * vf;
+            Zt = ipt + M2f * timeelapsed;
+
+            GameObject.Find("Gunball").transform.position = new Vector3(positionX, positionY, Zg);
+            GameObject.Find("Target").transform.position = new Vector3(0, 0, Zt);
+
+            GameObject.Find("Gunball").transform.position = ipg + Vector3.forward * timeelapsed * M1f;
+
+            TotalF = M1f + M2f;
         }
+
         //Debug.Log(positionZ + ", " + positionY + ", " + positionX);
         //Debug.Log(positionX + ", "+ positionY + ", " + positionZ);
-       
-        
-        
+
+
+
         // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
         // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
 
-        
+        //Debug.Log(Zg + ", " + Zt + " at " + timeelapsed);
 
-
+        Debug.Log(timeelapsed);
 
     }
 
@@ -174,10 +200,15 @@ public class Fire : MonoBehaviour {
        
             Debug.Log("collided");
             collided = true;
-            UnityEditor.EditorApplication.isPaused = true;
+            //UnityEditor.EditorApplication.isPaused = true;
 
-            
-   
+        ipg = GameObject.Find("Gunball").transform.position.z;
+        ipt = GameObject.Find("Target").transform.position.z;
+
+        
+
+      
+
     }
 
 
