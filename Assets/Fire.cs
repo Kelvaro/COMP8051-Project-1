@@ -11,10 +11,10 @@ public class Fire : MonoBehaviour {
     private float gravity = 9.81f;
     public GameObject gunball;
     public GameObject target;
-    public float timeelapsed;
+    public float timeelapsed, timeelapsed2; // time elapsed and time elapsed upon IMPACT (Project 9)
     public float positionZ, positionZf;
     public float positionY;
-    public float frame;
+    public float frame, frame2;
     public float cAngle;
     public float sAngle;
     public float tick;
@@ -58,17 +58,21 @@ public class Fire : MonoBehaviour {
     public float J, vr, uf, vf;
 
     public float M1i, M1f;
-    public float M2i, M2izm, M2f; //M2 initial velocity and position
-    public float Zg, Zt;// position of gunball and target
+    public float M2i, M2f; //M2 initial velocity and position
+
+    public float uin, uit, ufn, uft;
+    public float vin, vit, vfn, vft;
 
     Vector3 ipg, ipt; //initial position of gunball and target
-
+    Vector3 ipg2, ipt2; //initial position of gunball and target when it COLLIDES
     public float TotalI, TotalF;
 
 	// Use this for initialization
 	void Start () {
         ipg = gunball.transform.position;
         ipt = target.transform.position;
+
+        
 
         angle = (Mathf.Asin(gravity * (GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z) / Mathf.Pow(speed,2))/2 ) ;
         gunangle = angle * 180 / Mathf.PI;
@@ -112,6 +116,7 @@ public class Fire : MonoBehaviour {
         vf = -J / M2 + vi;
         uf = J / M1 + ui;
 
+        uin = ui * 
 
 
     }
@@ -124,11 +129,15 @@ public class Fire : MonoBehaviour {
         timeelapsed = Time.fixedDeltaTime * frame;
         frame++;
         tick += Time.deltaTime * frame;
+
+        /* timeelapsed = Time.fixedDeltaTime * frame;
+         frame++;
+         tick += Time.deltaTime * frame; */
         // positionZ = GameObject.Find("GunCentre").transform.position.z + (speed * SAlpha * CGamma) * timeelapsed;
 
         // positionZ = vz * Tau * (1 - Mathf.Exp(-timeelapsed / Tau)) + DragVz * Tau * (1 - Mathf.Exp(-timeelapsed / Tau))  - (DragVz * timeelapsed); // project 7 Q 3a
         //vz = (Mathf.Exp(-timeelapsed / Tau) * vz) + ((Mathf.Exp(-timeelapsed/Tau) - 1) * DragVz); // project 7 Q 3a
-        
+
 
 
         /*   SpeedY = SpeedYI - gravity * timeelapsed;
@@ -151,32 +160,32 @@ public class Fire : MonoBehaviour {
 
         if (collided == false)
         {
-            
-           
             M2i =M2 * vi;
             M1i = M1 * ui;
-            Zg = M1i * timeelapsed;
-            Zt = ipt + M2i * timeelapsed;
             TotalI = M2i + M1i;
-            GameObject.Find("Gunball").transform.position = new Vector3(positionX, positionY, Zg);
-            GameObject.Find("Target").transform.position = new Vector3(0, 0, Zt);
-            gunball.transform.position = Vector3.forward * 
+            gunball.transform.position = ipg + Vector3.forward * timeelapsed * M1i;
+            target.transform.position =ipt + Vector3.forward * timeelapsed * M2i;
             
         }
         if (collided == true) {
 
+  
+          
+           
+
             M1f = M1 * uf;
-            Zg = ipg + M1f * timeelapsed;
+            //Zg = ipg + M1f * timeelapsed;
 
             M2f = M2 * vf;
-            Zt = ipt + M2f * timeelapsed;
+            //Zt = ipt + M2f * timeelapsed;
 
-            GameObject.Find("Gunball").transform.position = new Vector3(positionX, positionY, Zg);
-            GameObject.Find("Target").transform.position = new Vector3(0, 0, Zt);
 
-            GameObject.Find("Gunball").transform.position = ipg + Vector3.forward * timeelapsed * M1f;
 
             TotalF = M1f + M2f;
+
+            gunball.transform.position =ipg2 + Vector3.forward * timeelapsed * M1f;
+            target.transform.position = ipt2 + Vector3.forward * timeelapsed * M2f;
+
         }
 
         //Debug.Log(positionZ + ", " + positionY + ", " + positionX);
@@ -187,9 +196,9 @@ public class Fire : MonoBehaviour {
         // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
         // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
 
-        //Debug.Log(Zg + ", " + Zt + " at " + timeelapsed);
-
-        Debug.Log(timeelapsed);
+        Debug.Log(gunball.transform.position.z + ", " + target.transform.position.z + " at " + timeelapsed);
+        
+        //Debug.Log(timeelapsed);
 
     }
 
@@ -200,14 +209,18 @@ public class Fire : MonoBehaviour {
        
             Debug.Log("collided");
             collided = true;
-            //UnityEditor.EditorApplication.isPaused = true;
+        timeelapsed = 0;
+        frame = 0;
+        ipg2 = gunball.transform.position;
+        ipt2 = target.transform.position;
+        //UnityEditor.EditorApplication.isPaused = true;
 
-        ipg = GameObject.Find("Gunball").transform.position.z;
-        ipt = GameObject.Find("Target").transform.position.z;
+        //ipg = GameObject.Find("Gunball").transform.position.z;
+        //ipt = GameObject.Find("Target").transform.position.z;
 
-        
 
-      
+
+
 
     }
 
