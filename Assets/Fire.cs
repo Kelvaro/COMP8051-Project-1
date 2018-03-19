@@ -52,23 +52,27 @@ public class Fire : MonoBehaviour {
     public float DragVz, DragVx; // drag velocity? Wz? Wx?
 
     public float M1, M2; // Mass of Gunball and Target
-    public float ui, vi; // Speed of GUnball and Target
+    public float uiz, viz, uix, vix; // Speed of GUnball and Target
     public float e;
     public bool collided;
-    public float J, vr, uf, vf;
+    public float Jz, Jx, vr, ufz, ufx,vfz, vfx;
 
     public float M1i, M1f;
     public float M2i, M2f; //M2 initial velocity and position
 
-    public float uin, uit, ufn, uft;
-    public float vin, vit, vfn, vft;
-
+    public float uin, uit, ufnz, ufnx, uftz, uftx;
+    public float vin, vit, vfnz, vfnx, vftz, vftx;
+    public float Jn;
     Vector3 ipg, ipt; //initial position of gunball and target
     Vector3 ipg2, ipt2; //initial position of gunball and target when it COLLIDES
     public float TotalI, TotalF;
-
-	// Use this for initialization
-	void Start () {
+    public float r1z, r2z; // dunno it just means something to do with project 10. Collision Point apparently.
+    public float r1x, r2x;
+    public float normalZ, normalX; //calculated from r1 and r2;
+    public float TangentialZ, TangentialX;
+    // Use this for initialization
+    void Start()
+    { 
         ipg = gunball.transform.position;
         ipt = target.transform.position;
 
@@ -111,12 +115,15 @@ public class Fire : MonoBehaviour {
         //gunballCollider = GameObject.Find("Gunball").GetComponent<SphereCollider>();
         // targetCollider = GameObject.Find("Target").GetComponent<SphereCollider>();
 
-        vr = ui - vi;
-        J = -vr * (e + 1) * M1 * M2 / (M1 + M2);
-        vf = -J / M2 + vi;
-        uf = J / M1 + ui;
+        vr = uiz - viz;
+        Jz = -vr * (e + 1) * M1 * M2 / (M1 + M2);
+        vfz = -Jz / M2 + viz;
+        ufz = Jz / M1 + uiz;
+        
+        
 
-        uin = ui * 
+
+        
 
 
     }
@@ -160,8 +167,8 @@ public class Fire : MonoBehaviour {
 
         if (collided == false)
         {
-            M2i =M2 * vi;
-            M1i = M1 * ui;
+            M2i =M2 * viz;
+            M1i = M1 * uiz;
             TotalI = M2i + M1i;
             gunball.transform.position = ipg + Vector3.forward * timeelapsed * M1i;
             target.transform.position =ipt + Vector3.forward * timeelapsed * M2i;
@@ -173,10 +180,10 @@ public class Fire : MonoBehaviour {
           
            
 
-            M1f = M1 * uf;
+            M1f = M1 * ufz;
             //Zg = ipg + M1f * timeelapsed;
 
-            M2f = M2 * vf;
+            M2f = M2 * vfz;
             //Zt = ipt + M2f * timeelapsed;
 
 
@@ -218,10 +225,40 @@ public class Fire : MonoBehaviour {
         //ipg = GameObject.Find("Gunball").transform.position.z;
         //ipt = GameObject.Find("Target").transform.position.z;
 
+        r1z = gunball.transform.position.z;
+        r1x = gunball.transform.position.x;
 
+        r2z = target.transform.position.z;
+        r2x = target.transform.position.x;
+        TangentialZ = -1 * normalX;
+        TangentialX = 1 * normalZ;
 
+        Jn = Jz * normalZ + Jx * normalX; 
 
+        normalZ = r2z - r1z;
+        normalX = r2x - r1x;
+        uin = uiz * normalZ + uix * normalX;
+        uit = uiz * TangentialZ + uix * TangentialX;
+        vin = viz * normalZ + vix * normalX;
+        vit = viz * TangentialZ + vix * TangentialX;
 
+        ufnz = (Jn / M1 + uin) * normalZ;
+        ufx = (Jn / M1 + uin) * normalX;
+
+        uftz = uit * TangentialZ;
+        uftx = uit * TangentialX;
+
+        vfnz = (Jn / M2 + vin) * normalZ;
+        vfnx = (Jn / M2 + vin) * normalX;
+
+        vftz = vit * TangentialZ;
+        vftx = vit * TangentialX;
+
+        ufz = ufnz + uftz;
+        ufx = ufnx + uftx;
+
+        vfz = vfnz + vftz;
+        vfx = vfnx + vftx;
     }
 
 

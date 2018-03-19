@@ -355,7 +355,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 372804717}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 25}
+  m_LocalPosition: {x: -0.3, y: 0, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -676,8 +676,10 @@ MonoBehaviour:
   DragVx: 0
   M1: 1
   M2: 3
-  ui: 25
-  vi: 2
+  uiz: 0
+  viz: 0
+  uix: 0
+  vix: 0
   e: 1
   collided: 0
   J: 0
@@ -688,8 +690,22 @@ MonoBehaviour:
   M1f: 0
   M2i: 0
   M2f: 0
+  uin: 0
+  uit: 0
+  ufn: 0
+  uft: 0
+  vin: 0
+  vit: 0
+  vfn: 0
+  vft: 0
   TotalI: 0
   TotalF: 0
+  r1z: 0
+  r2z: 0
+  r1x: 0
+  r2x: 0
+  normalZ: 0
+  normalX: 0
 --- !u!54 &1016500187
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -986,8 +1002,10 @@ MonoBehaviour:
   DragVx: 0
   M1: 1
   M2: 1
-  ui: 5
-  vi: -5
+  uiz: 5
+  viz: -5
+  uix: 0
+  vix: 0
   e: 1
   collided: 1
   J: 0
@@ -998,8 +1016,22 @@ MonoBehaviour:
   M1f: 0
   M2i: 0
   M2f: 0
+  uin: 0
+  uit: 0
+  ufn: 0
+  uft: 0
+  vin: 0
+  vit: 0
+  vfn: 0
+  vft: 0
   TotalI: 0
   TotalF: 0
+  r1z: 0
+  r2z: 0
+  r1x: 0
+  r2x: 0
+  normalZ: 0
+  normalX: 0
 --- !u!1 &1980224427
 GameObject:
   m_ObjectHideFlags: 0
