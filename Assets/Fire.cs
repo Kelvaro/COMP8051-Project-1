@@ -81,12 +81,16 @@ public class Fire : MonoBehaviour {
     public float EnergyFinalGunballZ, EnergyFinalGunballX;
     public float EnergyFinalTargetZ, EnergyFinalTargetX;
     public float EnergyFinalTotalZ, EnergyFinalTotalX;
+
+    public float zPosGunball;
+    public float r1, r2;
     // Use this for initialization
     void Start()
     { 
         ipg = gunball.transform.position;
         ipt = target.transform.position;
 
+       
         
 
         angle = (Mathf.Asin(gravity * (GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z) / Mathf.Pow(speed,2))/2 ) ;
@@ -205,7 +209,8 @@ public class Fire : MonoBehaviour {
             EnergyFinalTotalZ = EnergyFinalGunballZ + EnergyFinalTargetZ;
             EnergyFinalTotalX = EnergyFinalGunballX + EnergyFinalTargetX;
 
-
+            ConversionMomentumX = M2fx + M1fx;
+            ConversionMomentumZ = M2fz + M1fz;
 
             moveRight = ipg2x + gunball.transform.position.x * timeelapsed * M1fx;
             moveZ = ipg2z+ gunball.transform.position.z  * timeelapsed * M1fz;
@@ -242,6 +247,7 @@ public class Fire : MonoBehaviour {
    void OnTriggerEnter(Collider collision)
     {
        
+
             Debug.Log("collided");
             collided = true;
         timeelapsed = 0;
@@ -249,10 +255,12 @@ public class Fire : MonoBehaviour {
         ipg2z = gunball.transform.position.z;
         ipt2z = target.transform.position.z;
 
+       
+
         ipg2x = gunball.transform.position.x;
         ipt2x = target.transform.position.x;
 
-//        UnityEditor.EditorApplication.isPaused = true;
+        UnityEditor.EditorApplication.isPaused = true;
 
         //ipg = GameObject.Find("Gunball").transform.position.z;
         //ipt = GameObject.Find("Target").transform.position.z;
@@ -262,13 +270,19 @@ public class Fire : MonoBehaviour {
 
         r2z = target.transform.position.z;
         r2x = target.transform.position.x;
+
+
+        Vector3 goat = target.transform.position - gunball.transform.position;
+        float lord = Mathf.Sqrt(1.0f - goat.x * goat.x);
+
+        normalZ = lord;
+        normalX = r2x - r1x;
+
         TangentialZ = -1 * normalX;
         TangentialX = 1 * normalZ;
 
-        Jn = Jz * normalZ + Jx * normalX; 
+        Jn = (Jz * normalZ) + (Jx * normalX);
 
-        normalZ = r2z - r1z;
-        normalX = r2x - r1x;
         uin = uiz * normalZ + uix * normalX;
         uit = uiz * TangentialZ + uix * TangentialX;
         vin = viz * normalZ + vix * normalX;
