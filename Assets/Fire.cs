@@ -56,20 +56,31 @@ public class Fire : MonoBehaviour {
     public float e;
     public bool collided;
     public float Jz, Jx, vr, ufz, ufx,vfz, vfx;
-
-    public float M1i, M1f;
-    public float M2i, M2f; //M2 initial velocity and position
+    public float vf;
+    public float M1iz, M1fz, M1ix, M1fx;
+    public float M2iz, M2fz, M2ix, M2fx; //M2 initial velocity and position
 
     public float uin, uit, ufnz, ufnx, uftz, uftx;
     public float vin, vit, vfnz, vfnx, vftz, vftx;
     public float Jn;
     Vector3 ipg, ipt; //initial position of gunball and target
-    Vector3 ipg2, ipt2; //initial position of gunball and target when it COLLIDES
+    public float ipg2z, ipg2x, ipt2z, ipt2x; //initial position of gunball and target when it COLLIDES
     public float TotalI, TotalF;
     public float r1z, r2z; // dunno it just means something to do with project 10. Collision Point apparently.
     public float r1x, r2x;
     public float normalZ, normalX; //calculated from r1 and r2;
     public float TangentialZ, TangentialX;
+
+    public float ConversionMomentumZ, ConversionMomentumX;
+
+    public float moveRight, moveZ, moveZ2, moveRight2;
+
+    public float EnergyInitialGunballZ, EnergyInitialGunballX;
+    public float EnergyInitialTargetZ, EnergyInitialTargetX;
+    public float EnergyTotalZ, EnergyTotalX;
+    public float EnergyFinalGunballZ, EnergyFinalGunballX;
+    public float EnergyFinalTargetZ, EnergyFinalTargetX;
+    public float EnergyFinalTotalZ, EnergyFinalTotalX;
     // Use this for initialization
     void Start()
     { 
@@ -117,10 +128,8 @@ public class Fire : MonoBehaviour {
 
         vr = uiz - viz;
         Jz = -vr * (e + 1) * M1 * M2 / (M1 + M2);
-        vfz = -Jz / M2 + viz;
+        vf = -Jz / M2 + viz;
         ufz = Jz / M1 + uiz;
-        
-        
 
 
         
@@ -167,31 +176,50 @@ public class Fire : MonoBehaviour {
 
         if (collided == false)
         {
-            M2i =M2 * viz;
-            M1i = M1 * uiz;
-            TotalI = M2i + M1i;
-            gunball.transform.position = ipg + Vector3.forward * timeelapsed * M1i;
-            target.transform.position =ipt + Vector3.forward * timeelapsed * M2i;
-            
+            M2iz = M2 * viz;
+            M2ix = M2 * vix;
+            M1iz = M1 * uiz;
+            M1ix = M1 * uix;
+            TotalI = M2iz + M1iz;
+            gunball.transform.position = ipg + Vector3.forward * timeelapsed * M1iz;
+            target.transform.position =ipt + Vector3.forward * timeelapsed * M2iz;
+
+
+            EnergyInitialGunballZ = M1 * uiz * uiz * 0.5f;
+            EnergyInitialTargetZ = M2 * viz * viz * 0.5f;
+
+            EnergyTotalZ = EnergyInitialGunballZ + EnergyInitialTargetZ;
+            EnergyTotalX = EnergyInitialGunballX + EnergyInitialTargetX;
+
+
         }
         if (collided == true) {
 
-  
-          
-           
 
-            M1f = M1 * ufz;
-            //Zg = ipg + M1f * timeelapsed;
+            EnergyFinalGunballZ = 0.5f * M1 * ufz * ufz;
+            EnergyFinalGunballX = 0.5f * M1 * ufx * ufx;
 
-            M2f = M2 * vfz;
-            //Zt = ipt + M2f * timeelapsed;
+            EnergyFinalTargetZ = 0.5f * M2 * vfz * vfz;
+            EnergyFinalTargetX = 0.5f * M2 * vfx * vfx;
+
+            EnergyFinalTotalZ = EnergyFinalGunballZ + EnergyFinalTargetZ;
+            EnergyFinalTotalX = EnergyFinalGunballX + EnergyFinalTargetX;
 
 
 
-            TotalF = M1f + M2f;
+            moveRight = ipg2x + gunball.transform.position.x * timeelapsed * M1fx;
+            moveZ = ipg2z+ gunball.transform.position.z  * timeelapsed * M1fz;
 
-            gunball.transform.position =ipg2 + Vector3.forward * timeelapsed * M1f;
-            target.transform.position = ipt2 + Vector3.forward * timeelapsed * M2f;
+            moveRight2 = ipt2x + target.transform.position.x * timeelapsed * M2fx;
+            moveZ2 = ipt2z + target.transform.position.z * timeelapsed * M2fz;
+
+            TotalF = M1fz + M2fz;
+
+            gunball.transform.position = new Vector3(moveRight,0,moveZ);
+            //(ipg2 + Vector3.forward * timeelapsed * M1fz) +(Vector3.right * M1fx);
+
+            target.transform.position = new Vector3(moveRight2,0,moveZ2);
+                //(ipt2 + Vector3.forward * timeelapsed * M2fz) + (Vector3.right * M2fx);
 
         }
 
@@ -203,7 +231,7 @@ public class Fire : MonoBehaviour {
         // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
         // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
 
-        Debug.Log(gunball.transform.position.z + ", " + target.transform.position.z + " at " + timeelapsed);
+        Debug.Log("gunball position z: " + gunball.transform.position.z + ", " + target.transform.position.z + " at " + timeelapsed);
         
         //Debug.Log(timeelapsed);
 
@@ -218,9 +246,13 @@ public class Fire : MonoBehaviour {
             collided = true;
         timeelapsed = 0;
         frame = 0;
-        ipg2 = gunball.transform.position;
-        ipt2 = target.transform.position;
-        //UnityEditor.EditorApplication.isPaused = true;
+        ipg2z = gunball.transform.position.z;
+        ipt2z = target.transform.position.z;
+
+        ipg2x = gunball.transform.position.x;
+        ipt2x = target.transform.position.x;
+
+//        UnityEditor.EditorApplication.isPaused = true;
 
         //ipg = GameObject.Find("Gunball").transform.position.z;
         //ipt = GameObject.Find("Target").transform.position.z;
@@ -243,13 +275,13 @@ public class Fire : MonoBehaviour {
         vit = viz * TangentialZ + vix * TangentialX;
 
         ufnz = (Jn / M1 + uin) * normalZ;
-        ufx = (Jn / M1 + uin) * normalX;
+        ufnx = (Jn / M1 + uin) * normalX;
 
         uftz = uit * TangentialZ;
         uftx = uit * TangentialX;
 
-        vfnz = (Jn / M2 + vin) * normalZ;
-        vfnx = (Jn / M2 + vin) * normalX;
+        vfnz = ((-Jn / M2) + vin) * normalZ; // fix values
+        vfnx = ((-Jn / M2) + vin) * normalX; // incorrect values
 
         vftz = vit * TangentialZ;
         vftx = vit * TangentialX;
@@ -259,11 +291,26 @@ public class Fire : MonoBehaviour {
 
         vfz = vfnz + vftz;
         vfx = vfnx + vftx;
+
+
+
+
+
+        M1fz = M1 * ufz;
+        M1fx = M1 * ufx;
+        //Zg = ipg + M1f * timeelapsed;
+
+        M2fz = M2 * vfz;
+        M2fx = M2 * vfx;
+        //Zt = ipt + M2f * timeelapsed;
+
+
+
     }
 
 
 
-    
+
 
 
 

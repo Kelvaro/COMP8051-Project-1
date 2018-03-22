@@ -162,6 +162,11 @@ Prefab:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 96876740589079250, guid: ebd2a2e921bec754fbc5da833da83c75,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 54361312014117212, guid: ebd2a2e921bec754fbc5da833da83c75, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: ebd2a2e921bec754fbc5da833da83c75, type: 2}
@@ -682,22 +687,39 @@ MonoBehaviour:
   vix: 0
   e: 1
   collided: 0
-  J: 0
+  Jz: 0
+  Jx: 0
   vr: 0
-  uf: 0
+  ufz: 0
+  ufx: 0
+  vfz: 0
+  vfx: 0
   vf: 0
-  M1i: 0
-  M1f: 0
-  M2i: 0
-  M2f: 0
+  M1iz: 0
+  M1fz: 0
+  M1ix: 0
+  M1fx: 0
+  M2iz: 0
+  M2fz: 0
+  M2ix: 0
+  M2fx: 0
   uin: 0
   uit: 0
-  ufn: 0
-  uft: 0
+  ufnz: 0
+  ufnx: 0
+  uftz: 0
+  uftx: 0
   vin: 0
   vit: 0
-  vfn: 0
-  vft: 0
+  vfnz: 0
+  vfnx: 0
+  vftz: 0
+  vftx: 0
+  Jn: 0
+  ipg2z: 0
+  ipg2x: 0
+  ipt2z: 0
+  ipt2x: 0
   TotalI: 0
   TotalF: 0
   r1z: 0
@@ -706,6 +728,26 @@ MonoBehaviour:
   r2x: 0
   normalZ: 0
   normalX: 0
+  TangentialZ: 0
+  TangentialX: 0
+  ConversionMomentumZ: 0
+  ConversionMomentumX: 0
+  moveRight: 0
+  moveZ: 0
+  moveZ2: 0
+  moveRight2: 0
+  EnergyInitialGunballZ: 0
+  EnergyInitialGunballX: 0
+  EnergyInitialTargetZ: 0
+  EnergyInitialTargetX: 0
+  EnergyTotalZ: 0
+  EnergyTotalX: 0
+  EnergyFinalGunballZ: 0
+  EnergyFinalGunballX: 0
+  EnergyFinalTargetZ: 0
+  EnergyFinalTargetX: 0
+  EnergyFinalTotalZ: 0
+  EnergyFinalTotalX: 0
 --- !u!54 &1016500187
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1008,22 +1050,39 @@ MonoBehaviour:
   vix: 0
   e: 1
   collided: 1
-  J: 0
+  Jz: 0
+  Jx: 0
   vr: 0
-  uf: 0
+  ufz: 0
+  ufx: 0
+  vfz: 0
+  vfx: 0
   vf: 0
-  M1i: 0
-  M1f: 0
-  M2i: 0
-  M2f: 0
+  M1iz: 0
+  M1fz: 0
+  M1ix: 0
+  M1fx: 0
+  M2iz: 0
+  M2fz: 0
+  M2ix: 0
+  M2fx: 0
   uin: 0
   uit: 0
-  ufn: 0
-  uft: 0
+  ufnz: 0
+  ufnx: 0
+  uftz: 0
+  uftx: 0
   vin: 0
   vit: 0
-  vfn: 0
-  vft: 0
+  vfnz: 0
+  vfnx: 0
+  vftz: 0
+  vftx: 0
+  Jn: 0
+  ipg2z: 0
+  ipg2x: 0
+  ipt2z: 0
+  ipt2x: 0
   TotalI: 0
   TotalF: 0
   r1z: 0
@@ -1032,6 +1091,26 @@ MonoBehaviour:
   r2x: 0
   normalZ: 0
   normalX: 0
+  TangentialZ: 0
+  TangentialX: 0
+  ConversionMomentumZ: 0
+  ConversionMomentumX: 0
+  moveRight: 0
+  moveZ: 0
+  moveZ2: 0
+  moveRight2: 0
+  EnergyInitialGunballZ: 0
+  EnergyInitialGunballX: 0
+  EnergyInitialTargetZ: 0
+  EnergyInitialTargetX: 0
+  EnergyTotalZ: 0
+  EnergyTotalX: 0
+  EnergyFinalGunballZ: 0
+  EnergyFinalGunballX: 0
+  EnergyFinalTargetZ: 0
+  EnergyFinalTargetX: 0
+  EnergyFinalTotalZ: 0
+  EnergyFinalTotalX: 0
 --- !u!1 &1980224427
 GameObject:
   m_ObjectHideFlags: 0
