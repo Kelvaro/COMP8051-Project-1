@@ -278,6 +278,8 @@ public class Fire : MonoBehaviour {
         normalZ = lord;
         normalX = r2x - r1x;
 
+
+
         TangentialZ = -1 * normalX;
         TangentialX = 1 * normalZ;
 
