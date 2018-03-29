@@ -84,6 +84,9 @@ public class Fire : MonoBehaviour {
 
     public float zPosGunball;
     public float r1, r2;
+    public float Zcol, Xcol;
+    public float W1z, W2z; // ask what the W in the pdf means. Assuming it's rotation atm
+
     // Use this for initialization
     void Start()
     { 
@@ -225,7 +228,7 @@ public class Fire : MonoBehaviour {
 
             target.transform.position = new Vector3(moveRight2,0,moveZ2);
                 //(ipt2 + Vector3.forward * timeelapsed * M2fz) + (Vector3.right * M2fx);
-
+            W1z = 
         }
 
         //Debug.Log(positionZ + ", " + positionY + ", " + positionX);
@@ -273,7 +276,11 @@ public class Fire : MonoBehaviour {
 
 
         Vector3 goat = target.transform.position - gunball.transform.position;
-        float lord = Mathf.Sqrt(1.0f - goat.x * goat.x);
+        float lord = target.transform.position.z - 1f;
+        Zcol = target.transform.position.z - 0.5f;
+        Xcol = gunball.transform.position.x + ((target.transform.position.x - gunball.transform.position.x) / 2);
+        gunball.transform.position = new Vector3(0, 0, lord);
+
 
         normalZ = lord;
         normalX = r2x - r1x;
@@ -320,6 +327,7 @@ public class Fire : MonoBehaviour {
         M2fx = M2 * vfx;
         //Zt = ipt + M2f * timeelapsed;
 
+        W1z =
 
 
     }
