@@ -86,8 +86,20 @@ public class Fire : MonoBehaviour
     public float zPosGunball;
     public float r1, r2;
     public float Zcol, Xcol;
-    public float W1z, W2z; // ask what the W in the pdf means. Assuming it's rotation atm
+    //public var W1z, W2z; // ask what the W in the pdf means. Assuming it's rotation atm
+    public float InertiaGunball, InertiaTarget;
+    public float JMass1, JMass2;
+    public float J;
 
+    public Vector3 ColPoint;
+    public Vector3 VecObj1;
+    public Vector3 Obj1ToCol;//r1 in pdf file formula.
+    public Vector3 VecObj2; //r2 in pdf file formula.
+    public Vector3 Obt2ToCol;
+    public Vector3 normal;
+    public float AMi;
+    public float Lfinal1, Lfinal2, LfinalTotal;
+    public float pi;
     // Use this for initialization
     void Start()
     {
@@ -139,6 +151,7 @@ public class Fire : MonoBehaviour
         vf = -Jz / M2 + viz;
         ufz = Jz / M1 + uiz;
 
+       
 
 
 
@@ -214,23 +227,30 @@ public class Fire : MonoBehaviour
             EnergyFinalTotalZ = EnergyFinalGunballZ + EnergyFinalTargetZ;
             EnergyFinalTotalX = EnergyFinalGunballX + EnergyFinalTargetX;
 
-            ConversionMomentumX = M2fx + M1fx;
-            ConversionMomentumZ = M2fz + M1fz;
 
-            moveRight = ipg2x + gunball.transform.position.x * timeelapsed * M1fx;
-            moveZ = ipg2z + gunball.transform.position.z * timeelapsed * M1fz;
+            moveRight = Time.fixedDeltaTime * M1fx;
+            moveZ = Time.fixedDeltaTime * M1fz;
 
-            moveRight2 = ipt2x + target.transform.position.x * timeelapsed * M2fx;
-            moveZ2 = ipt2z + target.transform.position.z * timeelapsed * M2fz;
+            moveRight2 = Time.fixedDeltaTime * M2fx;
+            moveZ2 = Time.fixedDeltaTime * M2fz;
 
             TotalF = M1fz + M2fz;
 
-            gunball.transform.position = new Vector3(moveRight, 0, moveZ);
+            gunball.transform.position += new Vector3(moveRight, 0, moveZ);
             //(ipg2 + Vector3.forward * timeelapsed * M1fz) +(Vector3.right * M1fx);
 
-            target.transform.position = new Vector3(moveRight2, 0, moveZ2);
+            target.transform.position += new Vector3(moveRight2, 0, moveZ2);
             //(ipt2 + Vector3.forward * timeelapsed * M2fz) + (Vector3.right * M2fx);
-            W1z =
+            var W1z = Vector3.Cross(Obj1ToCol, J*normal) / InertiaGunball;
+            var W2z = Vector3.Cross(Obt2ToCol, -J * normal) / InertiaTarget;
+
+            gunball.transform.Rotate(W1z * Time.fixedDeltaTime);
+            target.transform.Rotate(W2z * Time.fixedDeltaTime);
+
+
+
+         
+
         }
 
         //Debug.Log(positionZ + ", " + positionY + ", " + positionX);
@@ -241,7 +261,7 @@ public class Fire : MonoBehaviour
         // GameObject.Find("Gunball(Clone)").transform.eulerAngles = new Vector3(-AngularDegree, 0);
         // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
 
-        Debug.Log("gunball position z: " + gunball.transform.position.z + ", " + target.transform.position.z + " at " + timeelapsed);
+        //Debug.Log("gunball position z: " + gunball.transform.position.z + ", " + target.transform.position.z + " at " + timeelapsed);
 
         //Debug.Log(timeelapsed);
 
@@ -277,23 +297,40 @@ public class Fire : MonoBehaviour
         r2x = target.transform.position.x;
 
 
-        Vector3 goat = target.transform.position - gunball.transform.position;
+        
         float lord = target.transform.position.z - 1f;
         Zcol = target.transform.position.z - 0.5f;
         Xcol = gunball.transform.position.x + ((target.transform.position.x - gunball.transform.position.x) / 2);
-        gunball.transform.position = new Vector3(0, 0, lord);
+        Vector3 goat = gunball.transform.position;
+        goat.z = lord;
+        gunball.transform.position = goat;
 
 
-        normalZ = lord;
+
+
+
+        ColPoint = new Vector3(Xcol, 0, Zcol);
+
+        VecObj1 = gunball.transform.position;
+
+        Obj1ToCol = ColPoint - VecObj1; //r1 in pdf file formula.
+
+        VecObj2 = target.transform.position;
+
+        Obt2ToCol = ColPoint - VecObj2; //r2 in pdf file formula.
+        
+
+
+        normalZ = r2z - r1z;
         normalX = r2x - r1x;
 
-
+        normal = new Vector3(0, 0, 1);
 
         TangentialZ = -1 * normalX;
         TangentialX = 1 * normalZ;
 
         Jn = (Jz * normalZ) + (Jx * normalX);
-
+        
         uin = uiz * normalZ + uix * normalX;
         uit = uiz * TangentialZ + uix * TangentialX;
         vin = viz * normalZ + vix * normalX;
@@ -329,7 +366,23 @@ public class Fire : MonoBehaviour
         M2fx = M2 * vfx;
         //Zt = ipt + M2f * timeelapsed;
 
-        W1z =
+        InertiaGunball = M1 * (Mathf.Pow(gunball.transform.localScale.x,2) + Mathf.Pow(gunball.transform.localScale.y,2 )) / 12;
+        InertiaTarget = M2 * (Mathf.Pow(target.transform.localScale.x, 2) + Mathf.Pow(target.transform.localScale.y, 2)) / 12;
+            
+
+        //N DOT [ (object1tCol CROSS normal / InertialGunball) CROSS object1toCol ]
+        var JmassGP1 = Vector3.Cross(Obj1ToCol, normal/InertiaGunball);
+        var JmassGP2 = Vector3.Cross(JmassGP1, Obj1ToCol);
+        JMass1 = Vector3.Dot(normal,JmassGP2);
+
+
+        var JmassTP1 = Vector3.Cross(Obt2ToCol, normal / InertiaTarget);
+        var JmassTP2 = Vector3.Cross(JmassTP1, Obj1ToCol);
+        JMass2 = Vector3.Dot(normal, JmassTP2);
+
+        J = -vr * (e + 1) * (1 / (((1 / M1) + (1 / M2)) + JMass1 + -JMass2));
+
+        pi = M1 * uiz  + M2 * viz;
 
 
 
@@ -359,5 +412,6 @@ public class Fire : MonoBehaviour
 
 
     */
+
 
 }
