@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fire : MonoBehaviour {
+public class Fire : MonoBehaviour
+{
     public float angle; //theta
     public float gunangle; // angle of the gun
     public float GunVelocityInitial;
@@ -55,7 +56,7 @@ public class Fire : MonoBehaviour {
     public float uiz, viz, uix, vix; // Speed of GUnball and Target
     public float e;
     public bool collided;
-    public float Jz, Jx, vr, ufz, ufx,vfz, vfx;
+    public float Jz, Jx, vr, ufz, ufx, vfz, vfx;
     public float vf;
     public float M1iz, M1fz, M1ix, M1fx;
     public float M2iz, M2fz, M2ix, M2fx; //M2 initial velocity and position
@@ -89,31 +90,31 @@ public class Fire : MonoBehaviour {
 
     // Use this for initialization
     void Start()
-    { 
+    {
         ipg = gunball.transform.position;
         ipt = target.transform.position;
 
-       
-        
 
-        angle = (Mathf.Asin(gravity * (GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z) / Mathf.Pow(speed,2))/2 ) ;
+
+
+        angle = (Mathf.Asin(gravity * (GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z) / Mathf.Pow(speed, 2)) / 2);
         gunangle = angle * 180 / Mathf.PI;
-        cAngle = Mathf.Cos(gunangle * Mathf.PI/ 180);
+        cAngle = Mathf.Cos(gunangle * Mathf.PI / 180);
         sAngle = Mathf.Sin(gunangle * Mathf.PI / 180);
-        
-       
+
+
         //Instantiate(gunball, GameObject.Find("GunCentre").transform.position, Quaternion.identity);
         Debug.Log(GameObject.Find("GunCentre").transform.position);
-       
+
         Rad = Mathf.Asin(gravity * (Mathf.Sqrt(Mathf.Pow(GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z, 2) + Mathf.Pow(GameObject.Find("Target").transform.position.x, 2)) / Mathf.Pow(speed, 2)));
         degree = Rad * (180 / Mathf.PI);
         Alpha = (180 - degree) / 2;
-        
+
 
         CAlpha = Mathf.Cos(Alpha * Mathf.PI / 180);
         SAlpha = Mathf.Sin(Alpha * Mathf.PI / 180);
-        
-        Gamma = Mathf.Asin(GameObject.Find("Target").transform.position.x / Mathf.Sqrt(Mathf.Pow(GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z, 2) + Mathf.Pow(GameObject.Find("Target").transform.position.x , 2) ));
+
+        Gamma = Mathf.Asin(GameObject.Find("Target").transform.position.x / Mathf.Sqrt(Mathf.Pow(GameObject.Find("Target").transform.position.z - GameObject.Find("GunCentre").transform.position.z, 2) + Mathf.Pow(GameObject.Find("Target").transform.position.x, 2)));
         CGamma = Mathf.Cos(Gamma);
         SGamma = Mathf.Sin(Gamma);
         //GameObject.Find("GunCentre").transform.eulerAngles = new Vector3(-gunangle, Gamma * 180 / Mathf.PI, 0); //Commented out for Project 9
@@ -127,7 +128,7 @@ public class Fire : MonoBehaviour {
         //Note that Shaun got Vz and vx mixed up on the Excel Formula sheet.
 
         DragVz = ((Cw * Vw * CGamma) / Cd);
-        DragVx = ((Cw * Vw * SGamma) / Cd  );
+        DragVx = ((Cw * Vw * SGamma) / Cd);
 
         collided = false;
         //gunballCollider = GameObject.Find("Gunball").GetComponent<SphereCollider>();
@@ -139,7 +140,7 @@ public class Fire : MonoBehaviour {
         ufz = Jz / M1 + uiz;
 
 
-        
+
 
 
     }
@@ -189,7 +190,7 @@ public class Fire : MonoBehaviour {
             M1ix = M1 * uix;
             TotalI = M2iz + M1iz;
             gunball.transform.position = ipg + Vector3.forward * timeelapsed * M1iz;
-            target.transform.position =ipt + Vector3.forward * timeelapsed * M2iz;
+            target.transform.position = ipt + Vector3.forward * timeelapsed * M2iz;
 
 
             EnergyInitialGunballZ = M1 * uiz * uiz * 0.5f;
@@ -200,7 +201,8 @@ public class Fire : MonoBehaviour {
 
 
         }
-        if (collided == true) {
+        if (collided == true)
+        {
 
 
             EnergyFinalGunballZ = 0.5f * M1 * ufz * ufz;
@@ -216,19 +218,19 @@ public class Fire : MonoBehaviour {
             ConversionMomentumZ = M2fz + M1fz;
 
             moveRight = ipg2x + gunball.transform.position.x * timeelapsed * M1fx;
-            moveZ = ipg2z+ gunball.transform.position.z  * timeelapsed * M1fz;
+            moveZ = ipg2z + gunball.transform.position.z * timeelapsed * M1fz;
 
             moveRight2 = ipt2x + target.transform.position.x * timeelapsed * M2fx;
             moveZ2 = ipt2z + target.transform.position.z * timeelapsed * M2fz;
 
             TotalF = M1fz + M2fz;
 
-            gunball.transform.position = new Vector3(moveRight,0,moveZ);
+            gunball.transform.position = new Vector3(moveRight, 0, moveZ);
             //(ipg2 + Vector3.forward * timeelapsed * M1fz) +(Vector3.right * M1fx);
 
-            target.transform.position = new Vector3(moveRight2,0,moveZ2);
-                //(ipt2 + Vector3.forward * timeelapsed * M2fz) + (Vector3.right * M2fx);
-            W1z = 
+            target.transform.position = new Vector3(moveRight2, 0, moveZ2);
+            //(ipt2 + Vector3.forward * timeelapsed * M2fz) + (Vector3.right * M2fx);
+            W1z =
         }
 
         //Debug.Log(positionZ + ", " + positionY + ", " + positionX);
@@ -240,25 +242,25 @@ public class Fire : MonoBehaviour {
         // GameObject.Find("Gunball(Clone)").transform.Rotate(Vector3.right * -AngularDegree);
 
         Debug.Log("gunball position z: " + gunball.transform.position.z + ", " + target.transform.position.z + " at " + timeelapsed);
-        
+
         //Debug.Log(timeelapsed);
 
     }
 
 
 
-   void OnTriggerEnter(Collider collision)
+    void OnTriggerEnter(Collider collision)
     {
-       
 
-            Debug.Log("collided");
-            collided = true;
+
+        Debug.Log("collided");
+        collided = true;
         timeelapsed = 0;
         frame = 0;
         ipg2z = gunball.transform.position.z;
         ipt2z = target.transform.position.z;
 
-       
+
 
         ipg2x = gunball.transform.position.x;
         ipt2x = target.transform.position.x;
@@ -330,6 +332,7 @@ public class Fire : MonoBehaviour {
         W1z =
 
 
+
     }
 
 
@@ -337,7 +340,24 @@ public class Fire : MonoBehaviour {
 
 
 
+    /*
+    1) how is normalizedZ = 0 when you look at the r1z and r2z point?
+
+    2) is ufn from project 10 same as ufz in project 11?
+
+    3) 1kg m^2 
+
+    4) r1 in 3 c iii
+
+    5) omfg... wth is a vector again?
+
+    6) What is Lcase R1 and R2 in his pdf?
+
+    7) What is Jmass 1 and 2 in his pdf?
+
+    8) what is k if normalized = k?
 
 
+    */
 
 }
