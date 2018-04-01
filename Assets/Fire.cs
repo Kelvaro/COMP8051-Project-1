@@ -98,8 +98,11 @@ public class Fire : MonoBehaviour
     public Vector3 Obt2ToCol;
     public Vector3 normal;
     public float AMi;
-    public float Lfinal1, Lfinal2, LfinalTotal;
+    public Vector3 LInitial, Lfinal1,Lfinal2;
     public float pi;
+    public float LFinalTotal;
+    public Vector3 p1i, p2i;
+    public Vector3 W1z, W2z;
     // Use this for initialization
     void Start()
     {
@@ -151,8 +154,9 @@ public class Fire : MonoBehaviour
         vf = -Jz / M2 + viz;
         ufz = Jz / M1 + uiz;
 
-       
 
+        p1i = gunball.transform.position;
+        p2i = target.transform.position;
 
 
 
@@ -241,8 +245,7 @@ public class Fire : MonoBehaviour
 
             target.transform.position += new Vector3(moveRight2, 0, moveZ2);
             //(ipt2 + Vector3.forward * timeelapsed * M2fz) + (Vector3.right * M2fx);
-            var W1z = Vector3.Cross(Obj1ToCol, J*normal) / InertiaGunball;
-            var W2z = Vector3.Cross(Obt2ToCol, -J * normal) / InertiaTarget;
+             
 
             gunball.transform.Rotate(W1z * Time.fixedDeltaTime);
             target.transform.Rotate(W2z * Time.fixedDeltaTime);
@@ -385,6 +388,14 @@ public class Fire : MonoBehaviour
         pi = M1 * uiz  + M2 * viz;
 
 
+        W1z = Vector3.Cross(Obj1ToCol, J * normal) / InertiaGunball;
+        W2z = Vector3.Cross(Obt2ToCol, -J * normal) / InertiaTarget;
+
+
+        LInitial = Vector3.Cross(Obj1ToCol, p1i) + Vector3.Cross(Obt2ToCol, p2i);
+        Lfinal1 = Vector3.Cross(Obj1ToCol, VecObj1) + (InertiaGunball * W1z);
+        Lfinal2 = Vector3.Cross(Obt2ToCol, VecObj2) + (InertiaTarget * W2z);
+        //LFinalTotal = Lfinal1 + Lfinal2;
 
     }
 
