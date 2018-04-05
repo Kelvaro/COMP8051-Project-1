@@ -392,10 +392,12 @@ public class Fire : MonoBehaviour
         W2z = Vector3.Cross(Obt2ToCol, -J * normal) / InertiaTarget;
 
 
-        LInitial = Vector3.Cross(Obj1ToCol, p1i) + Vector3.Cross(Obt2ToCol, p2i);
+        LInitial = Vector3.Cross(Obj1ToCol, p1i) + Vector3.Cross(Obt2ToCol, p2i); //Angular Momentum
         Lfinal1 = Vector3.Cross(Obj1ToCol, VecObj1) + (InertiaGunball * W1z);
         Lfinal2 = Vector3.Cross(Obt2ToCol, VecObj2) + (InertiaTarget * W2z);
-        //LFinalTotal = Lfinal1 + Lfinal2;
+        //LFinalTotal = Lfinal1 + Lfinal2; //Vector3 conversion problem. Ask for fix Jason
+
+        
 
     }
 
