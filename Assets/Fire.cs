@@ -206,8 +206,8 @@ public class Fire : MonoBehaviour
             M1iz = M1 * uiz;
             M1ix = M1 * uix;
             TotalI = M2iz + M1iz;
-            gunball.transform.position = ipg + Vector3.forward * timeelapsed * M1iz;
-            target.transform.position = ipt + Vector3.forward * timeelapsed * M2iz;
+            gunball.transform.position = ipg + Vector3.forward * timeelapsed * uiz;
+            target.transform.position = ipt + Vector3.forward * timeelapsed * viz;
 
 
             EnergyInitialGunballZ = M1 * uiz * uiz * 0.5f;
@@ -332,7 +332,7 @@ public class Fire : MonoBehaviour
         TangentialZ = -1 * normalX;
         TangentialX = 1 * normalZ;
 
-        Jn = (Jz * normalZ) + (Jx * normalX);
+        Jn = (Jz * normalZ) + (Jx * normalX); //Never used this in project 11 according to Jason. DOuble check in case
         
         uin = uiz * normalZ + uix * normalX;
         uit = uiz * TangentialZ + uix * TangentialX;
@@ -351,11 +351,11 @@ public class Fire : MonoBehaviour
         vftz = vit * TangentialZ;
         vftx = vit * TangentialX;
 
-        ufz = ufnz + uftz;
+      /*  ufz = ufnz + uftz;
         ufx = ufnx + uftx;
 
         vfz = vfnz + vftz;
-        vfx = vfnx + vftx;
+        vfx = vfnx + vftx; */
 
 
 
@@ -384,6 +384,10 @@ public class Fire : MonoBehaviour
         JMass2 = Vector3.Dot(normal, JmassTP2);
 
         J = -vr * (e + 1) * (1 / (((1 / M1) + (1 / M2)) + JMass1 + -JMass2));
+
+        ufz = (J / M1) + uiz;
+        vfz = (-J / M2) + viz;
+
 
         pi = M1 * uiz  + M2 * viz;
 
