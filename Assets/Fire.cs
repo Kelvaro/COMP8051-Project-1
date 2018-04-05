@@ -98,11 +98,12 @@ public class Fire : MonoBehaviour
     public Vector3 Obt2ToCol;
     public Vector3 normal;
     public float AMi;
-    public Vector3 LInitial, Lfinal1,Lfinal2;
-    public float pi;
-    public float LFinalTotal;
-    public Vector3 p1i, p2i;
+    public Vector3 LInitial, Lfinal1,Lfinal2, LfinalTotal;
+    public float pi, pf;
+ 
+    public Vector3 P1i, P2i , P2f, P1f;
     public Vector3 W1z, W2z;
+    public float KineticEnergy, RotationalKineticEnergy, KineticEnergyFinal;
     // Use this for initialization
     void Start()
     {
@@ -155,8 +156,6 @@ public class Fire : MonoBehaviour
         ufz = Jz / M1 + uiz;
 
 
-        p1i = gunball.transform.position;
-        p2i = target.transform.position;
 
 
 
@@ -388,20 +387,31 @@ public class Fire : MonoBehaviour
         ufz = (J / M1) + uiz;
         vfz = (-J / M2) + viz;
 
+        P1i = new Vector3(0,0, M1 * uiz);  //P1 initial on pdf
+        P2i = new Vector3(0,0,M2 * viz);  //P2 initial on pdf
+        pi = P1i.z  + P2i.z; //pi final
 
-        pi = M1 * uiz  + M2 * viz;
+        P1f = new Vector3(0,0,M1 * ufz);  //P1 final on pdf
+        P2f = new Vector3(0,0,M2 * vfz); //P2 final on pdf
+        pf = P1f.z + P2f.z; //pf final
+
+        W1z = Vector3.Cross(Obj1ToCol, -J * normal) / InertiaGunball; //omega 1 on pdf
+        W2z = Vector3.Cross(Obt2ToCol, J * normal) / InertiaTarget; //omega 2 on pdf
 
 
-        W1z = Vector3.Cross(Obj1ToCol, J * normal) / InertiaGunball;
-        W2z = Vector3.Cross(Obt2ToCol, -J * normal) / InertiaTarget;
+        LInitial = Vector3.Cross(Obj1ToCol, P1i) + Vector3.Cross(Obt2ToCol, P2i); //Angular Momentum
+        Lfinal1 = Vector3.Cross(Obj1ToCol, P1f) + (InertiaGunball * W1z);
+        Lfinal2 = Vector3.Cross(Obt2ToCol, P2f) + (InertiaTarget * W2z);
+        LfinalTotal = Lfinal1 + Lfinal2;
 
 
-        LInitial = Vector3.Cross(Obj1ToCol, p1i) + Vector3.Cross(Obt2ToCol, p2i); //Angular Momentum
-        Lfinal1 = Vector3.Cross(Obj1ToCol, VecObj1) + (InertiaGunball * W1z);
-        Lfinal2 = Vector3.Cross(Obt2ToCol, VecObj2) + (InertiaTarget * W2z);
-        //LFinalTotal = Lfinal1 + Lfinal2; //Vector3 conversion problem. Ask for fix Jason
+        KineticEnergy = ((M1 * ufz * ufz) / 2) + ((M2 * vfz * vfz) / 2);
+        RotationalKineticEnergy = ((InertiaGunball * W1z.y * W1z.y) / 2) + ((InertiaTarget * W2z.y * W2z.y) / 2);
 
-        
+        KineticEnergyFinal = KineticEnergy + RotationalKineticEnergy;
+
+
+
 
     }
 
